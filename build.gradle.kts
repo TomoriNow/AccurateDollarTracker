@@ -1,5 +1,6 @@
 plugins {
 	java
+	jacoco
 	id("org.springframework.boot") version "3.2.5"
 	id("io.spring.dependency-management") version "1.1.4"
 }
@@ -30,9 +31,22 @@ dependencies {
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.postgresql:postgresql:42.2.24")
 }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+tasks.test{
+	filter{
+		excludeTestsMatching("*FunctionalTest")
+	}
+	finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport{
+	dependsOn(tasks.test)
+}
+
