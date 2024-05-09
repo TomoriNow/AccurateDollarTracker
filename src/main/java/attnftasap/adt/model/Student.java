@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "students")
 @Getter @Setter
 public class Student extends User {
     @ManyToOne

@@ -2,6 +2,9 @@ package attnftasap.adt.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CategoryTest {
@@ -42,6 +45,14 @@ public class CategoryTest {
         category.setDescription(description);
 
         assertEquals("description", category.getDescription());
+    }
+
+    @Test
+    public void testGetSetCategoryUUID() {
+        UUID uuid = UUID.randomUUID();
+        category.setCategoryUUID(uuid);
+
+        assertEquals(uuid, category.getCategoryUUID());
     }
 
     @Test

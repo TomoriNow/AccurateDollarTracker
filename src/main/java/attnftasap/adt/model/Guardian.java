@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "guardians")
 @Getter @Setter
 public class Guardian extends User{
     @OneToMany(mappedBy = "guardian")
