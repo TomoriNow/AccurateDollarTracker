@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spending Report</title>
+</head>
+<body>
+<h1>Spending Report</h1>
+
+<!-- Year dropdown -->
+<label for="year">Select Year:</label>
+<select id="year" name="year">
+    <option th:each="year : ${years}" th:value="${year}" th:text="${year}"></option>
+</select>
+
+<!-- Month dropdown -->
+<label for="month">Select Month:</label>
+<select id="month" name="month">
+    <option value="1">January</option>
+    <option value="2">February</option>
+    <option value="3">March</option>
+    <option value="4">April</option>
+    <option value="5">May</option>
+    <option value="6">June</option>
+    <option value="7">July</option>
+    <option value="8">August</option>
+    <option value="9">September</option>
+    <option value="10">October</option>
+    <option value="11">November</option>
+    <option value="12">December</option>
+</select>
+
+<!-- Button to change spending report -->
+<button onclick="changeSpendingReport()">Change Spending Report</button>
+
+<!-- Display spending report information -->
+<p>Student: <span th:text="${spendingReport.student.username}"></span></p>
+<p>Month: <span th:text="${spendingReport.month}"></span></p>
+<p>Year: <span th:text="${spendingReport.year}"></span></p>
+<p>Total Expected Spending: <span th:text="${spendingReport.totalExpectedSpending}"></span></p>
+<p>Total Spending: <span th:text="${spendingReport.totalSpending}"></span></p>
+
+<!-- Display budget list -->
+<h2>Budget List</h2>
+<ul>
+    <li th:each="budget : ${spendingReport.budgetList}">
+        <span th:text="${budget.category.name}"></span>: <span th:text="${budget.amount}"></span>
+    </li>
+</ul>
+
+<!-- Display expense list -->
+<h2>Expense List</h2>
+<ul>
+    <li th:each="expense : ${spendingReport.expenseList}">
+        <span th:text="${expense.name}"></span> (<span th:text="${expense.category.name}"></span>): <span th:text="${expense.cost}"></span>
+    </li>
+</ul>
+
+<!-- Display spending per category -->
+<h2>Spending per Category</h2>
+<ul>
+    <li th:each="entry : ${spendingReport.totalSpendingPerCategory}">
+        <span th:text="${entry.key}"></span>: <span th:text="${entry.value}"></span>
+    </li>
+</ul>
+
+<script th:inline="javascript">
+    function changeSpendingReport() {
+        var selectedYear = document.getElementById("year").value;
+        var selectedMonth = document.getElementById("month").value;
+        window.location.href = "/student/spendingReport?year=" + selectedYear + "&month=" + selectedMonth;
+    }
+</script>
+</body>
+</html>
