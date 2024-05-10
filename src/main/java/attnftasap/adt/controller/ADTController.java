@@ -4,6 +4,7 @@ import attnftasap.adt.model.*;
 import attnftasap.adt.repository.ExpenseRepository;
 import attnftasap.adt.repository.GuardianRepository;
 import attnftasap.adt.repository.StudentRepository;
+import attnftasap.adt.service.CategoryService;
 import attnftasap.adt.service.ExpenseService;
 import attnftasap.adt.service.RequestService;
 import attnftasap.adt.service.SummaryService;
@@ -25,6 +26,9 @@ public class ADTController {
 
     @Autowired
     StudentRepository studentRepository;
+
+    @Autowired
+    CategoryService categoryService;
 
     @GetMapping("/")
     public String getSpendingReportDefault(Model model) {
@@ -71,6 +75,12 @@ public class ADTController {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
         return "redirect:/student/spendingReport?month="+month+"&year="+year;
+    }
+
+    @DeleteMapping("/delete-category")
+    public String deleteCustomCategory(@ModelAttribute Category category) {
+        categoryService.deleteCustomCategory(category.getCategoryUUID());
+        return "redirect:/student/spendingReport";
     }
 }
 
@@ -131,7 +141,7 @@ class TestController {
 
 @Controller
 @RequestMapping("/request")
-class GuardianshipRequestController {
+class GuardianshipRequestController extends ADTController {
     @Autowired
     private RequestService requestService;
 
@@ -145,7 +155,7 @@ class GuardianshipRequestController {
         return "guardianInformationPage";
     }
 
-    @GetMapping("/guardian-information-page")
+    @GetMapping("/invite-page")
     public String getInvitePage(Model model) {
         Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
         model.addAttribute("student", student);
