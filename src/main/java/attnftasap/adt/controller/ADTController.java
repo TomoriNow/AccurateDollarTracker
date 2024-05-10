@@ -4,6 +4,7 @@ import attnftasap.adt.model.*;
 import attnftasap.adt.repository.ExpenseRepository;
 import attnftasap.adt.repository.GuardianRepository;
 import attnftasap.adt.repository.StudentRepository;
+import attnftasap.adt.service.CategoryService;
 import attnftasap.adt.service.ExpenseService;
 import attnftasap.adt.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,12 @@ public class ADTController {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
         return "redirect:/student/spendingReport?month="+month+"&year="+year;
+    }
+
+    @DeleteMapping("/delete-category")
+    public String deleteCustomCategory(@ModelAttribute Category category) {
+        categoryService.deleteCustomCategory(category.getCategoryUUID());
+        return "redirect:/student/spendingReport";
     }
 }
 
