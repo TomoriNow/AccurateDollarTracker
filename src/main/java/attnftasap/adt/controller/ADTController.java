@@ -35,7 +35,7 @@ public class ADTController {
     @GetMapping("/")
     public String getSpendingReportDefault(Model model) {
         LocalDate currentDate = LocalDate.now();
-        return "redirect:/student/spending_report?month="+currentDate.getMonthValue()+"&year="+currentDate.getYear();
+        return "redirect:/student/spendingReport?month="+currentDate.getMonthValue()+"&year="+currentDate.getYear();
     }
 
     @GetMapping("/spendingReport")
@@ -54,7 +54,7 @@ public class ADTController {
         model.addAttribute("years", years);
         model.addAttribute("spendingReport", spendingReport);
 
-        return "spending_report";
+        return "spendingReport";
     }
 
     @GetMapping("/saveExpense")
