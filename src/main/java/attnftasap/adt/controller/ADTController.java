@@ -141,7 +141,7 @@ class TestController {
 
 @Controller
 @RequestMapping("/request")
-class GuardianshipRequestController extends ADTController {
+class GuardianshipRequestController {
     @Autowired
     private RequestService requestService;
 
