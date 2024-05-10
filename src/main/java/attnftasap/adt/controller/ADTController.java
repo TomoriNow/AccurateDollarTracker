@@ -9,6 +9,7 @@ import attnftasap.adt.service.ExpenseService;
 import attnftasap.adt.service.RequestService;
 import attnftasap.adt.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import attnftasap.adt.service.SummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -34,7 +35,7 @@ public class ADTController {
     @GetMapping("/")
     public String getSpendingReportDefault(Model model) {
         LocalDate currentDate = LocalDate.now();
-        return "redirect:/student/spendingReport?month="+currentDate.getMonthValue()+"&year="+currentDate.getYear();
+        return "redirect:/student/spending_report?month="+currentDate.getMonthValue()+"&year="+currentDate.getYear();
     }
 
     @GetMapping("/spendingReport")
@@ -53,7 +54,7 @@ public class ADTController {
         model.addAttribute("years", years);
         model.addAttribute("spendingReport", spendingReport);
 
-        return "spendingReport";
+        return "spending_report";
     }
 
     @GetMapping("/saveExpense")
@@ -75,13 +76,19 @@ public class ADTController {
         calendar.setTime(expense.getDate());
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
-        return "redirect:/student/spendingReport?month="+month+"&year="+year;
+        return "redirect:/student/spending_report?month="+month+"&year="+year;
+    }
+
+    @PostMapping("/create-category")
+    public String createCategory(@RequestParam String categoryName) {
+        categoryService.createCategory(categoryName);
+        return "redirect:/student/spendingReport";
     }
 
     @DeleteMapping("/delete-category")
     public String deleteCustomCategory(@ModelAttribute Category category) {
         categoryService.deleteCustomCategory(category.getCategoryUUID());
-        return "redirect:/student/spendingReport";
+        return "redirect:/student/spending_report";
     }
 }
 
@@ -211,7 +218,7 @@ class UserController {
 
 @Controller
 @RequestMapping("/request")
-class GuardianshipRequestController {
+class GuardianshipRequestController{
     @Autowired
     private RequestService requestService;
 
@@ -250,5 +257,28 @@ class GuardianshipRequestController {
     @PostMapping("/{studentId}/reject")
     public void rejectGuardianRequest(@PathVariable UUID studentId) {
         requestService.removeGuardianByID(studentId, false);
+    }
+}
+
+@Controller
+@RequestMapping("/student")
+class SummaryController {
+
+    @Autowired
+    private SummaryService summaryService;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @GetMapping("/summary")
+    public ResponseEntity<SpendingReport> getSummary (@RequestParam UUID studentId, @RequestParam int year, @RequestParam Month month) {
+        Optional<Student> optionalStudent = studentRepository.findById(studentId);
+        if (optionalStudent.isPresent()) {
+            Student student = optionalStudent.get();
+            SpendingReport spendingReport = summaryService.getSummary(student, month, year);
+            return ResponseEntity.ok(spendingReport);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
