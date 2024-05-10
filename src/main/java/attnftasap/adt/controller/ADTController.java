@@ -33,10 +33,10 @@ public class ADTController {
     @GetMapping("/")
     public String getSpendingReportDefault(Model model) {
         LocalDate currentDate = LocalDate.now();
-        return "redirect:/student/spendingReport?month="+currentDate.getMonthValue()+"&year="+currentDate.getYear();
+        return "redirect:/student/spending_report?month="+currentDate.getMonthValue()+"&year="+currentDate.getYear();
     }
 
-    @GetMapping("/spendingReport")
+    @GetMapping("/spending_report")
     public String getSpendingReportPage(@RequestParam("month") int month, @RequestParam("year") int year, Model model) {
         Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
         SpendingReport spendingReport = expenseService.getSpendingReport(student, Month.of(month), year);
@@ -52,7 +52,7 @@ public class ADTController {
         model.addAttribute("years", years);
         model.addAttribute("spendingReport", spendingReport);
 
-        return "spendingReport";
+        return "spending_report";
     }
 
     @GetMapping("/saveExpense")
@@ -74,7 +74,7 @@ public class ADTController {
         calendar.setTime(expense.getDate());
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
-        return "redirect:/student/spendingReport?month="+month+"&year="+year;
+        return "redirect:/student/spending_report?month="+month+"&year="+year;
     }
 
     @PostMapping("/create-category")
@@ -86,7 +86,7 @@ public class ADTController {
     @DeleteMapping("/delete-category")
     public String deleteCustomCategory(@ModelAttribute Category category) {
         categoryService.deleteCustomCategory(category.getCategoryUUID());
-        return "redirect:/student/spendingReport";
+        return "redirect:/student/spending_report";
     }
 }
 
@@ -147,7 +147,7 @@ class TestController {
 
 @Controller
 @RequestMapping("/request")
-class GuardianshipRequestController {
+class GuardianshipRequestController{
     @Autowired
     private RequestService requestService;
 
