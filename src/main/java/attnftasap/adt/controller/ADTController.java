@@ -140,7 +140,7 @@ class TestController {
 
 @Controller
 @RequestMapping("/request")
-class GuardianshipRequestController {
+class GuardianshipRequestController extends ADTController {
     @Autowired
     private RequestService requestService;
 
@@ -154,7 +154,7 @@ class GuardianshipRequestController {
         return "guardianInformationPage";
     }
 
-    @GetMapping("/guardian-information-page")
+    @GetMapping("/invite-page")
     public String getInvitePage(Model model) {
         Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
         model.addAttribute("student", student);
