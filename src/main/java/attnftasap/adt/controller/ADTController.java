@@ -4,7 +4,9 @@ import attnftasap.adt.model.*;
 import attnftasap.adt.repository.ExpenseRepository;
 import attnftasap.adt.repository.GuardianRepository;
 import attnftasap.adt.repository.StudentRepository;
+import attnftasap.adt.service.CategoryService;
 import attnftasap.adt.service.ExpenseService;
+import attnftasap.adt.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,10 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/student")
@@ -26,6 +25,9 @@ public class ADTController {
 
     @Autowired
     StudentRepository studentRepository;
+
+    @Autowired
+    CategoryService categoryService;
 
     @GetMapping("/")
     public String getSpendingReportDefault(Model model) {
@@ -72,6 +74,12 @@ public class ADTController {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
         return "redirect:/student/spendingReport?month="+month+"&year="+year;
+    }
+
+    @DeleteMapping("/delete-category")
+    public String deleteCustomCategory(@ModelAttribute Category category) {
+        categoryService.deleteCustomCategory(category.getCategoryUUID());
+        return "redirect:/student/spendingReport";
     }
 }
 
@@ -127,5 +135,49 @@ class TestController {
         expenseRepository.save(expense);
         List<Expense> expenses = expenseRepository.findAllByStudent(student);
         return ResponseEntity.ok(expenses.toString());
+    }
+}
+
+@Controller
+@RequestMapping("/request")
+class GuardianshipRequestController {
+    @Autowired
+    private RequestService requestService;
+
+    @Autowired
+    StudentRepository studentRepository;
+
+    @GetMapping("/guardian-information-page")
+    public String getGuardianInformationPage(Model model) {
+        Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
+        model.addAttribute("student", student);
+        return "guardianInformationPage";
+    }
+
+    @GetMapping("/invite-page")
+    public String getInvitePage(Model model) {
+        Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
+        model.addAttribute("student", student);
+        return "invitePage";
+    }
+
+    @GetMapping("/{studentId}")
+    public List<GuardianshipRequest> getGuardianRequestsByID(@PathVariable UUID studentId) {
+        return requestService.getGuardianRequestsByID(studentId);
+    }
+
+    @GetMapping("/is-guardian/{studentId}")
+    public Guardian getIsGuardianByID(@PathVariable UUID studentId) {
+        return requestService.getIsGuardianByID(studentId);
+    }
+
+    @PostMapping("/{studentId}/accept")
+    public void acceptGuardianRequest(@PathVariable UUID studentId) {
+        requestService.removeGuardianByID(studentId, true);
+    }
+
+    @PostMapping("/{studentId}/reject")
+    public void rejectGuardianRequest(@PathVariable UUID studentId) {
+        requestService.removeGuardianByID(studentId, false);
     }
 }
