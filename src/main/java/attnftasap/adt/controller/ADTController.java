@@ -77,6 +77,12 @@ public class ADTController {
         return "redirect:/student/spendingReport?month="+month+"&year="+year;
     }
 
+    @PostMapping("/create-category")
+    public String createCategory(@RequestParam String categoryName) {
+        categoryService.createCategory(categoryName);
+        return "redirect:/student/spendingReport";
+    }
+
     @DeleteMapping("/delete-category")
     public String deleteCustomCategory(@ModelAttribute Category category) {
         categoryService.deleteCustomCategory(category.getCategoryUUID());
