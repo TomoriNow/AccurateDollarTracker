@@ -1,14 +1,16 @@
 package attnftasap.adt.service;
 
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
+import attnftasap.adt.model.Suggestions;
 import java.util.Arrays;
 import java.util.List;
-
+import attnftasap.adt.repository.SuggestionsRepository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
