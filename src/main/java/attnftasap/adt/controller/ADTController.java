@@ -127,3 +127,47 @@ class TestController {
         return ResponseEntity.ok(expenses.toString());
     }
 }
+
+@Controller
+@RequestMapping("/request")
+class GuardianshipRequestController {
+    @Autowired
+    private RequestService requestService;
+
+    @Autowired
+    StudentRepository studentRepository;
+
+    @GetMapping("/guardian-information-page")
+    public String getGuardianInformationPage(Model model) {
+        Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
+        model.addAttribute("student", student);
+        return "guardianInformationPage";
+    }
+
+    @GetMapping("/guardian-information-page")
+    public String getInvitePage(Model model) {
+        Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
+        model.addAttribute("student", student);
+        return "invitePage";
+    }
+
+    @GetMapping("/{studentId}")
+    public List<GuardianshipRequest> getGuardianRequestsByID(@PathVariable UUID studentId) {
+        return requestService.getGuardianRequestsByID(studentId);
+    }
+
+    @GetMapping("/is-guardian/{studentId}")
+    public Guardian getIsGuardianByID(@PathVariable UUID studentId) {
+        return requestService.getIsGuardianByID(studentId);
+    }
+
+    @PostMapping("/{studentId}/accept")
+    public void acceptGuardianRequest(@PathVariable UUID studentId) {
+        requestService.removeGuardianByID(studentId, true);
+    }
+
+    @PostMapping("/{studentId}/reject")
+    public void rejectGuardianRequest(@PathVariable UUID studentId) {
+        requestService.removeGuardianByID(studentId, false);
+    }
+}
