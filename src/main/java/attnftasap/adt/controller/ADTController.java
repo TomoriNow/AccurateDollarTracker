@@ -7,6 +7,8 @@ import attnftasap.adt.repository.StudentRepository;
 import attnftasap.adt.service.CategoryService;
 import attnftasap.adt.service.ExpenseService;
 import attnftasap.adt.service.RequestService;
+import attnftasap.adt.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -36,8 +38,8 @@ public class ADTController {
     }
 
     @GetMapping("/spendingReport")
-    public String getSpendingReportPage(@RequestParam("month") int month, @RequestParam("year") int year, Model model) {
-        Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
+    public String getSpendingReportPage(@RequestParam("month") int month, @RequestParam("year") int year, HttpSession session, Model model) {
+        Student student = (Student)  session.getAttribute("userLogin");
         SpendingReport spendingReport = expenseService.getSpendingReport(student, Month.of(month), year);
         LocalDate currentDate = LocalDate.now();
         int startYear = 2023;
@@ -55,8 +57,8 @@ public class ADTController {
     }
 
     @GetMapping("/saveExpense")
-    public String saveExpenseForm(@RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("date") int date, Model model) {
-        Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
+    public String saveExpenseForm(@RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("date") int date, HttpSession session, Model model) {
+        Student student = (Student)  session.getAttribute("userLogin");
         Expense expense = new Expense();
         Calendar calendar = Calendar.getInstance();
         calendar.set(year,month,date);
@@ -135,6 +137,75 @@ class TestController {
         expenseRepository.save(expense);
         List<Expense> expenses = expenseRepository.findAllByStudent(student);
         return ResponseEntity.ok(expenses.toString());
+    }
+}
+
+@Controller
+@RequestMapping("/")
+class UserController {
+    @Autowired
+    UserService userService;
+
+    @GetMapping("/login/student")
+    public String loginStudentPage(Model model) {
+        model.addAttribute("loginRequest", new Student());
+        return "studentLogin";
+    }
+
+    @GetMapping("/login/guardian")
+    public String loginGuardianPage(Model model) {
+        model.addAttribute("loginRequest", new Guardian());
+        return "guardianLogin";
+    }
+
+    @PostMapping("/login/student")
+    public String login(@ModelAttribute Student student, HttpSession session, Model model) {
+        System.out.println("Login request: " + student);
+        Student authenticated = userService.studentAuthenticate(student.getUsername(), student.getPassword());
+        if (authenticated != null) {
+            session.setAttribute("userLogin", authenticated);
+            return "redirect:/student/";
+        } else {
+            return "error_page";
+        }
+    }
+
+    @PostMapping("/login/guardian")
+    public String login(@ModelAttribute Guardian guardian, HttpSession session, Model model) {
+        System.out.println("Login request: " + guardian);
+        Guardian authenticated = userService.guardianAuthenticate(guardian.getUsername(), guardian.getPassword());
+        if (authenticated != null) {
+            session.setAttribute("userLogin", authenticated);
+            return "redirect:/guardian/";
+        } else {
+            return "error_page";
+        }
+    }
+
+    @GetMapping("/register/student")
+    public String registerStudentPage(Model model) {
+        model.addAttribute("registerRequest", new Student());
+        return "studentRegister";
+    }
+
+    @GetMapping("/register/guardian")
+    public String registerGuardianPage(Model model) {
+        model.addAttribute("registerRequest", new Guardian());
+        return "guardianRegister";
+    }
+
+    @PostMapping("/register/student")
+    public String registerStudent(@ModelAttribute Student student) {
+        System.out.println("Register request: " + student);
+        Student registeredStudent = userService.registerStudent(student);
+        return registeredStudent == null ? "error_page" : "redirect:/login/student";
+    }
+
+    @PostMapping("/register/guardian")
+    public String registerGuardian(@ModelAttribute Guardian guardian) {
+        System.out.println("Register request: " + guardian);
+        Guardian registeredGuardian = userService.registerGuardian(guardian);
+        return registeredGuardian == null ? "error_page" : "redirect:/login/guardian";
     }
 }
 

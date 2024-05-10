@@ -20,6 +20,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Autowired
     BudgetRepository budgetRepository;
 
+    @Override
     public SpendingReport getSpendingReport(Student student, Month month, int year) {
         List<Budget> budgetList= budgetRepository.findAllByStudentAndMonthAndYear(student,month,year);
         List<Expense> expenseList = expenseRepository.findExpensesByStudentAndMonthYear(student, month.getValue(), year);
@@ -27,6 +28,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         return new SpendingReport(student, year, month, budgetList, expenseList);
     }
 
+    @Override
     public Expense saveExpense(Expense expense) {
         return expenseRepository.save(expense);
     }
