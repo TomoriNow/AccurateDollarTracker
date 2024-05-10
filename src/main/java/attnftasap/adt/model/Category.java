@@ -31,4 +31,9 @@ public class Category {
         this.student = student;
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
