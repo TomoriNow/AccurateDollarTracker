@@ -25,6 +25,9 @@ public class ADTController {
     @Autowired
     StudentRepository studentRepository;
 
+    @Autowired
+    CategoryService categoryService;
+
     @GetMapping("/")
     public String getSpendingReportDefault(Model model) {
         LocalDate currentDate = LocalDate.now();
