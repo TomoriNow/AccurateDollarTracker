@@ -10,6 +10,7 @@ import java.util.UUID;
 @Service
 public interface RequestService {
     List<GuardianshipRequest> getGuardianRequestsByID(UUID studentId);
+    List<Guardian> findGuardiansByRequestIds(List<UUID> guardianshipRequestIds);
     Guardian getIsGuardianByID(UUID studentId);
     void removeGuardianByID(UUID studentId, boolean accept);
 }

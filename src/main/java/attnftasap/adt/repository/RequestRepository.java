@@ -14,7 +14,14 @@ import java.util.UUID;
 
 @Repository
 public interface RequestRepository extends JpaRepository<GuardianshipRequest, UUID> {
-    List<GuardianshipRequest> findAllById(UUID studentId);
+
+    @Transactional
+    @Query(value = "SELECT r FROM GuardianshipRequest r WHERE r.student.userUUID = ?1")
+    List<GuardianshipRequest> findAllByStudentID(UUID studentId);
+
+    @Transactional
+    @Query("SELECT r.guardian FROM GuardianshipRequest r WHERE r.id IN :requestIds")
+    List<Guardian> findGuardiansByRequestIds(@Param("requestIds") List<UUID> requestIds);
 
     @Transactional
     @Query("SELECT r.guardian FROM GuardianshipRequest r WHERE r.student.userUUID = ?1")

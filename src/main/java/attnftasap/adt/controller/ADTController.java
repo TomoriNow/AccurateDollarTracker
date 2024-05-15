@@ -3,6 +3,7 @@ package attnftasap.adt.controller;
 import attnftasap.adt.model.*;
 import attnftasap.adt.repository.ExpenseRepository;
 import attnftasap.adt.repository.GuardianRepository;
+import attnftasap.adt.repository.RequestRepository;
 import attnftasap.adt.repository.StudentRepository;
 import attnftasap.adt.service.CategoryService;
 import attnftasap.adt.service.ExpenseService;
@@ -11,6 +12,7 @@ import attnftasap.adt.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import attnftasap.adt.service.SummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/student")
@@ -31,6 +34,10 @@ public class ADTController {
 
     @Autowired
     CategoryService categoryService;
+
+    //@Qualifier("requestService")
+    @Autowired
+    private RequestService requestService;
 
     @GetMapping("/")
     public String getSpendingReportDefault(Model model) {
@@ -100,8 +107,12 @@ public class ADTController {
 
     @GetMapping("/invite-page")
     public String getInvitePage(Model model) {
-        Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
+        Student student = studentRepository.findByUsername("username"); // Placeholder waiting for login logic
+        List<GuardianshipRequest> guardianshipRequestList = requestService.getGuardianRequestsByID(student.getUserUUID());
+        List<UUID> requestIds = guardianshipRequestList.stream().map(GuardianshipRequest::getId).collect(Collectors.toList());
+        List<Guardian> guardianList = requestService.findGuardiansByRequestIds(requestIds);
         model.addAttribute("student", student);
+        model.addAttribute("guardianList", guardianList);
         return "invitePage";
     }
 }
