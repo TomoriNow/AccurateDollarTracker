@@ -35,7 +35,7 @@ public class ADTController {
     @GetMapping("/")
     public String getSpendingReportDefault(Model model) {
         LocalDate currentDate = LocalDate.now();
-        return "redirect:/student/spending_report?month="+currentDate.getMonthValue()+"&year="+currentDate.getYear();
+        return "redirect:/student/spendingReport?month="+currentDate.getMonthValue()+"&year="+currentDate.getYear();
     }
 
     @GetMapping("/spendingReport")
@@ -54,7 +54,7 @@ public class ADTController {
         model.addAttribute("years", years);
         model.addAttribute("spendingReport", spendingReport);
 
-        return "spending_report";
+        return "spendingReport";
     }
 
     @GetMapping("/saveExpense")
@@ -89,6 +89,20 @@ public class ADTController {
     public String deleteCustomCategory(@ModelAttribute Category category) {
         categoryService.deleteCustomCategory(category.getCategoryUUID());
         return "redirect:/student/spending_report";
+    }
+
+    @GetMapping("/guardian-information-page")
+    public String getGuardianInformationPage(Model model) {
+        Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
+        model.addAttribute("student", student);
+        return "guardianInformationPage";
+    }
+
+    @GetMapping("/invite-page")
+    public String getInvitePage(Model model) {
+        Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
+        model.addAttribute("student", student);
+        return "invitePage";
     }
 }
 
@@ -224,20 +238,6 @@ class GuardianshipRequestController{
 
     @Autowired
     StudentRepository studentRepository;
-
-    @GetMapping("/guardian-information-page")
-    public String getGuardianInformationPage(Model model) {
-        Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
-        model.addAttribute("student", student);
-        return "guardianInformationPage";
-    }
-
-    @GetMapping("/invite-page")
-    public String getInvitePage(Model model) {
-        Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
-        model.addAttribute("student", student);
-        return "invitePage";
-    }
 
     @GetMapping("/{studentId}")
     public List<GuardianshipRequest> getGuardianRequestsByID(@PathVariable UUID studentId) {
