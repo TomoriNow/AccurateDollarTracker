@@ -22,18 +22,22 @@
             </div>
             <div class="text-wrapper-invites">Invites</div>
             <div class="overlap-group-wrapper-invites">
-                <div class="overlap-invites2" th:each="guardian: ${guardianList}">
-                    <div class="rectangle-invites" ></div>
+                <div class="overlap-invites2" th:each="guardianRequest : ${guardianshipRequestList}">
+                    <div class="rectangle-invites"></div>
                     <div class="div-wrapper-invites">
                         <div class="overlap-group-invites2">
-                            <div class="text-wrapper-invites3" th:text="${guardian.getUsername()}"></div>
-                            <div class="text-wrapper-invites4">UUID: <span th:text="${guardian.getUserUUID()}"></span></div>
+                            <div class="text-wrapper-invites3" th:text="${guardianRequest.guardian.username}"></div>
+                            <div class="text-wrapper-invites4">UUID: <span th:text="${guardianRequest.guardian.userUUID}"></span></div>
                         </div>
                     </div>
                     <div class="rectangle-invites2"></div>
                     <div class="rectangle-invites3"></div>
-                    <div class="text-wrapper-invites5">Accept</div>
-                    <div class="text-wrapper-invites6">Reject</div>
+                    <a th:href="@{/request/{studentId}/accept/{requestId}(studentId=${student.userUUID}, requestId=${guardianRequest.id})}">
+                        <div class="text-wrapper-invites5">Accept</div>
+                    </a>
+                    <a th:href="@{/request/{studentId}/reject/{requestId}(studentId=${student.userUUID}, requestId=${guardianRequest.id})}">
+                        <div class="text-wrapper-invites6">Reject</div>
+                    </a>
                 </div>
             </div>
         </div>
