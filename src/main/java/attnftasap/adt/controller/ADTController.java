@@ -39,6 +39,9 @@ public class ADTController {
     @Autowired
     private RequestService requestService;
 
+    @Autowired
+    private RequestRepository requestRepository;
+
     @GetMapping("/")
     public String getSpendingReportDefault(Model model) {
         LocalDate currentDate = LocalDate.now();
@@ -101,18 +104,24 @@ public class ADTController {
     @GetMapping("/guardian-information-page")
     public String getGuardianInformationPage(Model model) {
         Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
+        Guardian guardian = student.getGuardian();
+        model.addAttribute("guardian", guardian);
         model.addAttribute("student", student);
         return "guardianInformationPage";
+    }
+
+    @PostMapping("/remove-guardian")
+    public String removeGuardianFromStudent(@RequestParam UUID studentId) {
+        requestRepository.setGuardianNull(studentId);
+        return "redirect:/student/guardian-information-page";
     }
 
     @GetMapping("/invite-page")
     public String getInvitePage(Model model) {
         Student student = studentRepository.findByUsername("username"); // Placeholder waiting for login logic
         List<GuardianshipRequest> guardianshipRequestList = requestService.getGuardianRequestsByID(student.getUserUUID());
-        List<UUID> requestIds = guardianshipRequestList.stream().map(GuardianshipRequest::getId).collect(Collectors.toList());
-        List<Guardian> guardianList = requestService.findGuardiansByRequestIds(requestIds);
         model.addAttribute("student", student);
-        model.addAttribute("guardianList", guardianList);
+        model.addAttribute("guardianshipRequestList", guardianshipRequestList);
         return "invitePage";
     }
 }
@@ -260,14 +269,16 @@ class GuardianshipRequestController{
         return requestService.getIsGuardianByID(studentId);
     }
 
-    @PostMapping("/{studentId}/accept")
-    public void acceptGuardianRequest(@PathVariable UUID studentId) {
-        requestService.removeGuardianByID(studentId, true);
+    @GetMapping("/{studentId}/accept/{requestId}")
+    public String acceptGuardianRequest(@PathVariable UUID studentId, @PathVariable UUID requestId) {
+        requestService.removeGuardianByID(studentId, requestId, true);
+        return "redirect:/student/guardian-information-page";
     }
 
-    @PostMapping("/{studentId}/reject")
-    public void rejectGuardianRequest(@PathVariable UUID studentId) {
-        requestService.removeGuardianByID(studentId, false);
+    @GetMapping("/{studentId}/reject/{requestId}")
+    public String rejectGuardianRequest(@PathVariable UUID studentId, @PathVariable UUID requestId) {
+        requestService.removeGuardianByID(studentId, requestId, false);
+        return "redirect:/student/invite-page";
     }
 }
 

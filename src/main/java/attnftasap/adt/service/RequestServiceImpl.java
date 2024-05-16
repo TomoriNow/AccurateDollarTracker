@@ -22,11 +22,6 @@ public class RequestServiceImpl implements RequestService {
         return requestRepository.findAllByStudentID(studentId);
     }
 
-    @Override
-    public List<Guardian> findGuardiansByRequestIds(List<UUID> requestIds) {
-        return requestRepository.findGuardiansByRequestIds(requestIds);
-    }
-
 
     @Override
     public Guardian getIsGuardianByID(UUID studentId) {
@@ -35,15 +30,15 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     @Transactional
-    public void removeGuardianByID(UUID studentId, boolean accept) {
-        if (accept) {
-            Guardian guardian = requestRepository.findGuardianByStudentId(studentId);
-            if (guardian != null) {
-                requestRepository.removeGuardianByStudentID(studentId);
-                requestRepository.setIsGuardianByID(studentId, guardian);
+    public void removeGuardianByID(UUID studentId, UUID requestId, boolean accept) {
+        GuardianshipRequest request = requestRepository.findById(requestId).orElse(null);
+        if (request != null) {
+            if (accept) {
+                requestRepository.setIsGuardianByID(studentId, request.getGuardian());
+            } else {
+                requestRepository.removeGuardianByStudentIdAndRequestId(studentId, requestId);
             }
-        } else {
-            requestRepository.removeGuardianByStudentID(studentId);
         }
     }
 }
+
