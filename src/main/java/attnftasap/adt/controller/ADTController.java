@@ -193,6 +193,7 @@ class UserController {
         Guardian authenticated = userService.guardianAuthenticate(guardian.getUsername(), guardian.getPassword());
         if (authenticated != null) {
             session.setAttribute("userLogin", authenticated);
+            System.out.println("User logged in: " + authenticated.getUsername());
             return "redirect:/guardian/";
         } else {
             return "error_page";
@@ -336,6 +337,29 @@ class SuggestionsController {
     public String createSuggestionSubmit(@ModelAttribute Suggestions suggestion) {
         suggestionsService.saveSuggestion(suggestion);
         return "redirect:/suggestions/list?studentId=" + suggestion.getChildUuid();
+    }
+}
+
+@Controller
+@RequestMapping("/guardian")
+class GuardianController {
+    @Autowired
+    ExpenseService expenseService;
+
+    @Autowired
+    StudentRepository studentRepository;
+
+    @Autowired
+    GuardianRepository guardianRepository;
+
+    @Autowired
+    CategoryService categoryService;
+    @Autowired
+    SuggestionsService suggestionsService;
+
+    @GetMapping("/")
+    public String childReport(Model model) {
+        return "childSpending";
     }
 }
 
