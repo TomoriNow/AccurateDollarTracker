@@ -21,23 +21,32 @@
                 </div>
             </div>
             <div class="text-wrapper-invites">Invites</div>
-            <div class="overlap-group-wrapper-invites">
-                <div class="overlap-invites2" th:each="guardianRequest : ${guardianshipRequestList}">
-                    <div class="rectangle-invites"></div>
-                    <div class="div-wrapper-invites">
-                        <div class="overlap-group-invites2">
-                            <div class="text-wrapper-invites3" th:text="${guardianRequest.guardian.username}"></div>
-                            <div class="text-wrapper-invites4">UUID: <span th:text="${guardianRequest.guardian.userUUID}"></span></div>
+            <div th:if="${guardianshipRequestList.isEmpty()}">
+                <div class="text-wrapper-3">No Guardian Requests Currently</div>
+                <p class="p">
+                    Guardians are able to monitor your finances and help you make better financial decisions. Wait For a
+                    guardian to add you!
+                </p>
+            </div>
+            <div th:if="${not guardianshipRequestList.isEmpty()}">
+                <div class="overlap-group-wrapper-invites">
+                    <div class="overlap-invites2" th:each="guardianRequest : ${guardianshipRequestList}">
+                        <div class="rectangle-invites"></div>
+                        <div class="div-wrapper-invites">
+                            <div class="overlap-group-invites2">
+                                <div class="text-wrapper-invites3" th:text="${guardianRequest.guardian.username}"></div>
+                                <div class="text-wrapper-invites4">UUID: <span th:text="${guardianRequest.guardian.userUUID}"></span></div>
+                            </div>
                         </div>
+                        <div class="rectangle-invites2"></div>
+                        <div class="rectangle-invites3"></div>
+                        <a th:href="@{/request/{studentId}/accept/{requestId}(studentId=${student.userUUID}, requestId=${guardianRequest.id})}">
+                            <div class="text-wrapper-invites5">Accept</div>
+                        </a>
+                        <a th:href="@{/request/{studentId}/reject/{requestId}(studentId=${student.userUUID}, requestId=${guardianRequest.id})}">
+                            <div class="text-wrapper-invites6">Reject</div>
+                        </a>
                     </div>
-                    <div class="rectangle-invites2"></div>
-                    <div class="rectangle-invites3"></div>
-                    <a th:href="@{/request/{studentId}/accept/{requestId}(studentId=${student.userUUID}, requestId=${guardianRequest.id})}">
-                        <div class="text-wrapper-invites5">Accept</div>
-                    </a>
-                    <a th:href="@{/request/{studentId}/reject/{requestId}(studentId=${student.userUUID}, requestId=${guardianRequest.id})}">
-                        <div class="text-wrapper-invites6">Reject</div>
-                    </a>
                 </div>
             </div>
         </div>
