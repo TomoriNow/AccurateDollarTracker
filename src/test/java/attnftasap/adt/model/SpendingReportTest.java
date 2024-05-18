@@ -4,10 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -102,10 +99,32 @@ public class SpendingReportTest {
 
     @Test
     public void testTotalSpendingPerCategory() {
-        assertEquals(0, spendingReport.getTotalSpendingPerCategory().get(categoryList.getFirst()));
-        assertEquals(150, spendingReport.getTotalSpendingPerCategory().get(categoryList.get(1)));
-        assertEquals(300, spendingReport.getTotalSpendingPerCategory().get(categoryList.get(2)));
-        assertEquals(450, spendingReport.getTotalSpendingPerCategory().get(categoryList.get(3)));
+        assertEquals(0, spendingReport.getTotalSpendingPerCategory().get(categoryList.getFirst().getName()));
+        assertEquals(150, spendingReport.getTotalSpendingPerCategory().get(categoryList.get(1).getName()));
+        assertEquals(300, spendingReport.getTotalSpendingPerCategory().get(categoryList.get(2).getName()));
+        assertEquals(450, spendingReport.getTotalSpendingPerCategory().get(categoryList.get(3).getName()));
+    }
+
+    @Test
+    public void testBudgetMap() {
+        Map<String, Integer> budgetMap = spendingReport.getBudgetMap();
+        assertEquals(0, budgetMap.get("categoryName0"));
+        assertEquals(200, budgetMap.get("categoryName1"));
+        assertEquals(400, budgetMap.get("categoryName2"));
+        assertEquals(600, budgetMap.get("categoryName3"));
+    }
+
+    @Test
+    public void testExpensesPerDate() {
+        Map<Integer, List<Expense>> expensesPerDate = spendingReport.getExpensesPerDate();
+        assertEquals(expenseList.getFirst(), expensesPerDate.get(1).getFirst());
+        assertEquals(expenseList.get(1), expensesPerDate.get(1).getLast());
+        assertEquals(expenseList.get(2), expensesPerDate.get(2).getFirst());
+        assertEquals(expenseList.get(3), expensesPerDate.get(2).getLast());
+        assertEquals(expenseList.get(4), expensesPerDate.get(3).getFirst());
+        assertEquals(expenseList.get(5), expensesPerDate.get(3).getLast());
+        assertEquals(expenseList.get(6), expensesPerDate.get(4).getFirst());
+        assertEquals(expenseList.get(7), expensesPerDate.get(4).getLast());
     }
 
     @Test
@@ -129,9 +148,16 @@ public class SpendingReportTest {
 
         assertEquals(originalTotalSpending+780+250+970+340, spendingReport.getTotalSpending());
 
-        assertEquals(780, spendingReport.getTotalSpendingPerCategory().get(categoryList.getFirst()));
-        assertEquals(400, spendingReport.getTotalSpendingPerCategory().get(categoryList.get(1)));
-        assertEquals(1270, spendingReport.getTotalSpendingPerCategory().get(categoryList.get(2)));
-        assertEquals(790, spendingReport.getTotalSpendingPerCategory().get(categoryList.get(3)));
+        assertEquals(780, spendingReport.getTotalSpendingPerCategory().get(categoryList.getFirst().getName()));
+        assertEquals(400, spendingReport.getTotalSpendingPerCategory().get(categoryList.get(1).getName()));
+        assertEquals(1270, spendingReport.getTotalSpendingPerCategory().get(categoryList.get(2).getName()));
+        assertEquals(790, spendingReport.getTotalSpendingPerCategory().get(categoryList.get(3).getName()));
+
+        Map<Integer, List<Expense>> expensesPerDate = spendingReport.getExpensesPerDate();
+
+        assertEquals(expenseList.get(8), expensesPerDate.get(28).getFirst());
+        assertEquals(expenseList.get(9), expensesPerDate.get(28).get(1));
+        assertEquals(expenseList.get(10), expensesPerDate.get(28).get(2));
+        assertEquals(expenseList.get(11), expensesPerDate.get(28).getLast());
     }
 }

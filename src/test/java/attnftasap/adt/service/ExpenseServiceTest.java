@@ -96,10 +96,10 @@ public class ExpenseServiceTest {
 
         assertEquals(900, spendingReport.getTotalSpending());
 
-        assertEquals(0, spendingReport.getTotalSpendingPerCategory().get(categoryList.getFirst()));
-        assertEquals(150, spendingReport.getTotalSpendingPerCategory().get(categoryList.get(1)));
-        assertEquals(300, spendingReport.getTotalSpendingPerCategory().get(categoryList.get(2)));
-        assertEquals(450, spendingReport.getTotalSpendingPerCategory().get(categoryList.get(3)));
+        assertEquals(0, spendingReport.getTotalSpendingPerCategory().get(categoryList.getFirst().getName()));
+        assertEquals(150, spendingReport.getTotalSpendingPerCategory().get(categoryList.get(1).getName()));
+        assertEquals(300, spendingReport.getTotalSpendingPerCategory().get(categoryList.get(2).getName()));
+        assertEquals(450, spendingReport.getTotalSpendingPerCategory().get(categoryList.get(3).getName()));
     }
 
     @Test
