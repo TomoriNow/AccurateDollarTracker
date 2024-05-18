@@ -1,11 +1,13 @@
 package attnftasap.adt.service;
 
 import attnftasap.adt.model.Category;
+import attnftasap.adt.model.Student;
 import attnftasap.adt.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -26,5 +28,15 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void deleteCustomCategory(UUID categoryId) {
         categoryRepository.deleteCategoryByCategoryUUID(categoryId);
+    }
+
+    public Category findCategoryFromStudent(String name, Student student) {
+        List<Category> categoryList = student.getCategories();
+        for (Category category: categoryList) {
+            if (category.getName().equals(name)) {
+                return category;
+            }
+        }
+        return null;
     }
 }

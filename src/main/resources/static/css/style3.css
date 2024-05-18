@@ -1,0 +1,280 @@
+/* Reset some default styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+.create-expense {
+    background-color: #9f70fd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+}
+
+.create-expense .overlap-wrapper {
+    background-color: #9f70fd;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.create-expense .overlap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.create-expense .background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #7f27ff;
+    border-radius: 15px;
+}
+
+.create-expense .navbar {
+    position: absolute;
+    width: 100%;
+    height: 10%;
+    top: 0;
+    left: 0;
+    background-color: #6917d1;
+    border-radius: 15px;
+    box-shadow: 0px 4px 4px #00000040;
+    display: flex;
+    align-items: center;
+    padding: 0 2%;
+}
+
+.create-expense .overlap-group {
+    display: flex;
+    align-items: center;
+}
+
+.create-expense .receipt-minus {
+    margin-left: 10px;
+    width: 41px;
+    height: 41px;
+}
+
+.create-expense .text-wrapper {
+    margin-left: 10px;
+    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 28px;
+}
+
+.create-expense .component {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.create-expense .div {
+    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 28px;
+    margin-right: 10px;
+}
+
+.create-expense .search-normal {
+    width: 24px;
+    height: 24px;
+}
+
+.create-expense .text-wrapper-2,
+.create-expense .text-wrapper-3,
+.create-expense .text-wrapper-4 {
+    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 24px;
+    margin-left: 20px;
+}
+
+.create-expense .rectangle {
+    position: absolute;
+    width: 45%;
+    height: 50%;
+    top: 20%;
+    left: 27.5%;
+    background-color: #d1c1f2;
+    border-radius: 15px;
+}
+
+.create-expense .overlap-group-wrapper {
+    position: absolute;
+    width: 263px;
+    height: 62px;
+    top: 75%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.create-expense .overlap-2 {
+    position: relative;
+    height: 62px;
+    border-radius: 15px;
+}
+
+.submit-button {
+    position: absolute;
+    width: 263px;
+    height: 62px;
+    top: 0;
+    left: 0;
+    background-color: #ffa800;
+    border-radius: 15px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: background-color 0.3s; /* Add smooth transition on hover */
+}
+
+.submit-button .button-text {
+    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 32px;
+    text-align: center;
+}
+
+/* Change background color on hover */
+.submit-button:hover {
+    background-color: #ffca52;
+}
+
+.create-expense .view-invites {
+    position: absolute;
+    width: 222px;
+    top: 9px;
+    left: 20px;
+    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 32px;
+    text-align: center;
+}
+
+.create-expense .div-wrapper {
+    position: absolute;
+    width: 60%;
+    height: 20%;
+    top: 35%;
+    left: 20%;
+}
+
+.create-expense .overlap-3 {
+    position: relative;
+    height: 100%;
+}
+
+.create-expense .rectangle-2 {
+    width: 100%;
+    height: 100%;
+    background-color: #e5d8ff;
+    border-radius: 15px;
+}
+
+.create-expense .text-wrapper-5 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
+    font-weight: 700;
+    color: #000000;
+    font-size: 26px;
+    padding: 10px;
+    padding-left: 30%;
+}
+
+.create-expense .groceries {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: "MADE Okine Sans PERSONAL USE-Medium", Helvetica;
+    font-weight: 500;
+    color: #000000;
+    font-size: 24px;
+    padding: 10px;
+}
+
+.create-expense .component-2,
+.create-expense .component-3 {
+    position: absolute;
+    width: 60%;
+    height: 10%;
+    left: 20%;
+    background-color: #e5d8ff;
+    border-radius: 15px;
+    top: 45%; /* Adjust this and the next component's top value to ensure they are well placed */
+    padding: 10px;
+}
+
+.create-expense .overlap-4 {
+    position: relative;
+    height: 100%;
+}
+
+.create-expense .rectangle-3 {
+    width: 100%;
+    height: 100%;
+    background-color: #e5d8ff;
+    border-radius: 15px;
+}
+
+.create-expense .element {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: "MADE Okine Sans PERSONAL USE-Medium", Helvetica;
+    font-weight: 500;
+    color: #000000;
+    font-size: 24px;
+    padding: 10px;
+}
+
+.create-expense .polygon {
+    position: absolute;
+    width: 20px;
+    height: 16px;
+    top: 50%;
+    left: 75%;
+    transform: translateY(-50%);
+}
+
+.text-input {
+    width: 85%;
+    height: 50px; /* Adjust height as needed */
+    background-color: #e5d8ff;
+    border-radius: 15px;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.subheading {
+    font-family: "MADE Okine Sans PERSONAL USE-Medium", Helvetica;
+    text-align: center;
+    font-weight: 700;
+    color: #000000;
+    font-size: 30px;
+    letter-spacing: 0;
+    line-height: normal;
+    white-space: nowrap;
+    display: flex;
+}
