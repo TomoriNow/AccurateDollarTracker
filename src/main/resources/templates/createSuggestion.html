@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Suggestion</title>
+</head>
+<body>
+<h1>Create Suggestion</h1>
+<form action="/suggestions/create" method="post">
+  <input type="hidden" th:value="${suggestion.childUuid}" name="childUuid"/>
+  <input type="hidden" th:value="${suggestion.guardianUuid}" name="guardianUuid"/>
+  <label for="suggestion">Suggestion:</label>
+  <textarea id="suggestion" name="suggestion" th:field="*{suggestion}"></textarea>
+  <button type="submit">Save</button>
+</form>
+</body>
+</html>

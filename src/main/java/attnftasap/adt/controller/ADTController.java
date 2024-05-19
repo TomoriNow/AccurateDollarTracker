@@ -6,6 +6,7 @@ import attnftasap.adt.repository.GuardianRepository;
 import attnftasap.adt.repository.RequestRepository;
 import attnftasap.adt.repository.StudentRepository;
 import attnftasap.adt.service.CategoryService;
+import attnftasap.adt.service.SuggestionsService;
 import attnftasap.adt.service.ExpenseService;
 import attnftasap.adt.service.RequestService;
 import attnftasap.adt.service.UserService;
@@ -35,6 +36,8 @@ public class ADTController {
 
     @Autowired
     CategoryService categoryService;
+    @Autowired
+    SuggestionsService suggestionsService;
 
     //@Qualifier("requestService")
     @Autowired
@@ -139,7 +142,6 @@ public class ADTController {
         categoryService.deleteCustomCategory(category.getCategoryUUID());
         return "redirect:/student/spending_report";
     }
-
     @GetMapping("/guardian-information-page")
     public String getGuardianInformationPage(Model model) {
         Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
@@ -162,6 +164,14 @@ public class ADTController {
         model.addAttribute("student", student);
         model.addAttribute("guardianshipRequestList", guardianshipRequestList);
         return "invitePage";
+    }
+
+    @GetMapping("/suggestions")
+    public String viewSuggestions(HttpSession session, Model model) {
+        Student student = (Student) session.getAttribute("userLogin");
+        List<Suggestions> suggestions = suggestionsService.displaySuggestion(student.getUserUUID().toString());
+        model.addAttribute("suggestions", suggestions);
+        return "studentSuggestions";
     }
 }
 
@@ -256,6 +266,7 @@ class UserController {
         Guardian authenticated = userService.guardianAuthenticate(guardian.getUsername(), guardian.getPassword());
         if (authenticated != null) {
             session.setAttribute("userLogin", authenticated);
+            System.out.println("User logged in: " + authenticated.getUsername());
             return "redirect:/guardian/";
         } else {
             return "error_page";
@@ -343,3 +354,73 @@ class SummaryController {
         }
     }
 }
+
+@Controller
+@RequestMapping("/suggestions")
+class SuggestionsController {
+
+    @Autowired
+    private SuggestionsService suggestionsService;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private GuardianRepository guardianRepository;
+
+    @GetMapping("/list")
+    public String listSuggestions(@RequestParam UUID studentId, HttpSession session, Model model) {
+        Guardian guardian = (Guardian) session.getAttribute("userLogin");
+
+        if (guardian != null) {
+            List<Student> students = guardian.getStudents();
+            List<Suggestions> suggestions = suggestionsService.displaySuggestion(studentId.toString());
+
+            model.addAttribute("students", students);
+            model.addAttribute("selectedStudentId", studentId);
+            model.addAttribute("suggestions", suggestions);
+
+            return "listSuggestions";
+        } else {
+            return "error_page"; // Handle the error case
+        }
+    }
+
+    @GetMapping("/create")
+    public String createSuggestionForm(@RequestParam UUID studentId, Model model) {
+        Suggestions suggestion = new Suggestions();
+        suggestion.setChildUuid(studentId.toString());
+        model.addAttribute("suggestion", suggestion);
+        return "createSuggestion";
+    }
+
+    @PostMapping("/create")
+    public String createSuggestionSubmit(@ModelAttribute Suggestions suggestion) {
+        suggestionsService.saveSuggestion(suggestion);
+        return "redirect:/suggestions/list?studentId=" + suggestion.getChildUuid();
+    }
+}
+
+@Controller
+@RequestMapping("/guardian")
+class GuardianController {
+    @Autowired
+    ExpenseService expenseService;
+
+    @Autowired
+    StudentRepository studentRepository;
+
+    @Autowired
+    GuardianRepository guardianRepository;
+
+    @Autowired
+    CategoryService categoryService;
+    @Autowired
+    SuggestionsService suggestionsService;
+
+    @GetMapping("/")
+    public String childReport(Model model) {
+        return "childSpending";
+    }
+}
+
