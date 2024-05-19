@@ -35,6 +35,7 @@ public class RequestServiceImpl implements RequestService {
         if (request != null) {
             if (accept) {
                 requestRepository.setIsGuardianByID(studentId, request.getGuardian());
+                requestRepository.removeGuardianByStudentIdAndRequestId(studentId, requestId);
             } else {
                 requestRepository.removeGuardianByStudentIdAndRequestId(studentId, requestId);
             }
