@@ -144,6 +144,8 @@ public class ADTController {
         Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
         model.addAttribute("student", student);
         return "invitePage";
+    }
+
     @GetMapping("/suggestions")
     public String viewSuggestions(HttpSession session, Model model) {
         Student student = (Student) session.getAttribute("userLogin");
