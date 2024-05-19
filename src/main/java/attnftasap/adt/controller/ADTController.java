@@ -58,7 +58,9 @@ public class ADTController {
         SpendingReport spendingReport = expenseService.getSpendingReport(student, Month.of(month), year);
         List<Integer> years = getYearOptions();
         List<Integer> dates = getDatesOfMonth(month, year);
+        List<Category> categories = categoryService.findAllCategoriesForStudent(student);
 
+        model.addAttribute("categories", categories);
         model.addAttribute("years", years);
         model.addAttribute("student", student);
         model.addAttribute("spendingReport", spendingReport);
@@ -137,10 +139,11 @@ public class ADTController {
         return "redirect:/student/spendingReport";
     }
 
-    @DeleteMapping("/delete-category")
-    public String deleteCustomCategory(@ModelAttribute Category category) {
-        categoryService.deleteCustomCategory(category.getCategoryUUID());
-        return "redirect:/student/spending_report";
+    @PostMapping("/delete-category")
+    public String deleteCustomCategory(@RequestParam UUID categoryUUID) {
+        //LocalDate currentDate = LocalDate.now();
+        categoryService.deleteCustomCategory(categoryUUID);
+        return "redirect:/student/";
     }
     @GetMapping("/guardian-information-page")
     public String getGuardianInformationPage(Model model) {
