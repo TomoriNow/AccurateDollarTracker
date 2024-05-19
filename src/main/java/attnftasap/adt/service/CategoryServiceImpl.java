@@ -3,6 +3,7 @@ package attnftasap.adt.service;
 import attnftasap.adt.model.Category;
 import attnftasap.adt.model.Student;
 import attnftasap.adt.repository.CategoryRepository;
+import jakarta.persistence.Inheritance;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,9 +28,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void deleteCustomCategory(UUID categoryId) {
-        categoryRepository.deleteCategoryByCategoryUUID(categoryId);
+        categoryRepository.deleteCustomCategoryByID(categoryId);
     }
 
+    @Override
     public Category findCategoryFromStudent(String name, Student student) {
         List<Category> categoryList = student.getCategories();
         for (Category category: categoryList) {
@@ -38,5 +40,10 @@ public class CategoryServiceImpl implements CategoryService {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<Category> findAllCategoriesForStudent(Student student) {
+        return categoryRepository.findByStudent(student);
     }
 }

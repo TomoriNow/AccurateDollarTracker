@@ -3,6 +3,7 @@ package attnftasap.adt.controller;
 import attnftasap.adt.model.*;
 import attnftasap.adt.repository.ExpenseRepository;
 import attnftasap.adt.repository.GuardianRepository;
+import attnftasap.adt.repository.RequestRepository;
 import attnftasap.adt.repository.StudentRepository;
 import attnftasap.adt.service.CategoryService;
 import attnftasap.adt.service.SuggestionsService;
@@ -12,6 +13,7 @@ import attnftasap.adt.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import attnftasap.adt.service.SummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +23,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/student")
@@ -36,6 +39,13 @@ public class ADTController {
     @Autowired
     SuggestionsService suggestionsService;
 
+    //@Qualifier("requestService")
+    @Autowired
+    private RequestService requestService;
+
+    @Autowired
+    private RequestRepository requestRepository;
+
     @GetMapping("/")
     public String getSpendingReportDefault(Model model) {
         LocalDate currentDate = LocalDate.now();
@@ -48,7 +58,9 @@ public class ADTController {
         SpendingReport spendingReport = expenseService.getSpendingReport(student, Month.of(month), year);
         List<Integer> years = getYearOptions();
         List<Integer> dates = getDatesOfMonth(month, year);
+        List<Category> categories = categoryService.findAllCategoriesForStudent(student);
 
+        model.addAttribute("categories", categories);
         model.addAttribute("years", years);
         model.addAttribute("student", student);
         model.addAttribute("spendingReport", spendingReport);
@@ -127,22 +139,33 @@ public class ADTController {
         return "redirect:/student/spendingReport";
     }
 
-    @DeleteMapping("/delete-category")
-    public String deleteCustomCategory(@ModelAttribute Category category) {
-        categoryService.deleteCustomCategory(category.getCategoryUUID());
-        return "redirect:/student/spending_report";
+    @PostMapping("/delete-category")
+    public String deleteCustomCategory(@RequestParam UUID categoryUUID) {
+        //LocalDate currentDate = LocalDate.now();
+        categoryService.deleteCustomCategory(categoryUUID);
+        return "redirect:/student/";
     }
     @GetMapping("/guardian-information-page")
     public String getGuardianInformationPage(Model model) {
         Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
+        Guardian guardian = student.getGuardian();
+        model.addAttribute("guardian", guardian);
         model.addAttribute("student", student);
         return "guardianInformationPage";
     }
 
+    @PostMapping("/remove-guardian")
+    public String removeGuardianFromStudent(@RequestParam UUID studentId) {
+        requestRepository.setGuardianNull(studentId);
+        return "redirect:/student/guardian-information-page";
+    }
+
     @GetMapping("/invite-page")
     public String getInvitePage(Model model) {
-        Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
+        Student student = studentRepository.findByUsername("username"); // Placeholder waiting for login logic
+        List<GuardianshipRequest> guardianshipRequestList = requestService.getGuardianRequestsByID(student.getUserUUID());
         model.addAttribute("student", student);
+        model.addAttribute("guardianshipRequestList", guardianshipRequestList);
         return "invitePage";
     }
 
@@ -299,14 +322,16 @@ class GuardianshipRequestController{
         return requestService.getIsGuardianByID(studentId);
     }
 
-    @PostMapping("/{studentId}/accept")
-    public void acceptGuardianRequest(@PathVariable UUID studentId) {
-        requestService.removeGuardianByID(studentId, true);
+    @GetMapping("/{studentId}/accept/{requestId}")
+    public String acceptGuardianRequest(@PathVariable UUID studentId, @PathVariable UUID requestId) {
+        requestService.removeGuardianByID(studentId, requestId, true);
+        return "redirect:/student/guardian-information-page";
     }
 
-    @PostMapping("/{studentId}/reject")
-    public void rejectGuardianRequest(@PathVariable UUID studentId) {
-        requestService.removeGuardianByID(studentId, false);
+    @GetMapping("/{studentId}/reject/{requestId}")
+    public String rejectGuardianRequest(@PathVariable UUID studentId, @PathVariable UUID requestId) {
+        requestService.removeGuardianByID(studentId, requestId, false);
+        return "redirect:/student/invite-page";
     }
 }
 

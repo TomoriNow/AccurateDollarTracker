@@ -54,10 +54,10 @@ class CategoryServiceImplTest {
 
     @Test
     void deleteCustomCategory() {
-        UUID categoryId = UUID.randomUUID();
-
+        Student student = new Student("username", "email", "password");
+        Category category = new Category(student, "Test Category", "Category Description");
+        UUID categoryId = category.getCategoryUUID();
         categoryService.deleteCustomCategory(categoryId);
-
         verify(categoryRepository, times(1)).deleteCategoryByCategoryUUID(categoryId);
     }
 

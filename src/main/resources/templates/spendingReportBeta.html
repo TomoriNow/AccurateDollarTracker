@@ -33,8 +33,9 @@
                         <td class="table-header">Category</td>
                         <td class="table-header">Expected</td>
                         <td class="table-header">Reality</td>
+                        <td class="table-header">Modify</td>
                     </tr>
-                    <tr th:each = "category : ${student.categories}">
+                    <tr th:each = "category : ${categories}">
                         <td th:text = "${category.name}" class="table-cell">
                             Groceries
                         </td>
@@ -43,6 +44,12 @@
                         </td>
                         <td class="table-cell" th:text = "${spendingReport.totalSpendingPerCategory.getOrDefault(category.name, 0)}">
                             320k
+                        </td>
+                        <td class="table-cell">
+                            <form th:action="@{/student/delete-category}" method="post" style="display: inline;">
+                                <input type="hidden" name="categoryUUID" th:value="${category.categoryUUID}">
+                                <button type="submit" class="btn btn-link">Delete</button>
+                            </form>
                         </td>
                     </tr>
                 </table>
