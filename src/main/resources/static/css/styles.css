@@ -9,7 +9,7 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    overflow: hidden; /* Prevent scrolling */
+    /* overflow: hidden; Remove this line */
 }
 
 .guardian-information {
@@ -33,19 +33,20 @@ body, html {
     width: 100%;
     height: 100%;
     left: 0;
+    overflow-y: auto; /* Add this line to enable vertical scrolling */
 }
 
 .guardian-information .background {
-    position: absolute;
+    position: fixed;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     top: 0;
     left: 0;
     background-color: #7f27ff;
 }
 
 .guardian-information .navbar {
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 89px;
     top: 0; /* Adjusted top position */
@@ -210,7 +211,7 @@ body, html {
 }
 
 .guardian-information .text-wrapper-invites {
-    position: absolute;
+    position: fixed;
     width: 293px;
     top: 30px;
     left: 50%; /* Center horizontally */
