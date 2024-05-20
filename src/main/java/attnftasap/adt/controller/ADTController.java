@@ -5,13 +5,8 @@ import attnftasap.adt.repository.ExpenseRepository;
 import attnftasap.adt.repository.GuardianRepository;
 import attnftasap.adt.repository.RequestRepository;
 import attnftasap.adt.repository.StudentRepository;
-import attnftasap.adt.service.CategoryService;
-import attnftasap.adt.service.SuggestionsService;
-import attnftasap.adt.service.ExpenseService;
-import attnftasap.adt.service.RequestService;
-import attnftasap.adt.service.UserService;
+import attnftasap.adt.service.*;
 import jakarta.servlet.http.HttpSession;
-import attnftasap.adt.service.SummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +40,9 @@ public class ADTController {
 
     @Autowired
     private RequestRepository requestRepository;
+
+    @Autowired
+    private BudgetService budgetService;
 
     @GetMapping("/")
     public String getSpendingReportDefault(Model model) {
@@ -134,15 +132,29 @@ public class ADTController {
     }
 
     @GetMapping("/create-category")
-    public String createCategoryPage() {
+    public String createCategoryPage(Model model) {
+        List<String> months = Arrays.asList("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+        model.addAttribute("months", months);
         return "createCategory";
     }
 
     @PostMapping("/create-category")
-    public String createCustomCategory(@RequestParam String categoryName) {
-        categoryService.createCategory(categoryName);
-        return "redirect:/create-category";
+    public String createCustomCategory(@RequestParam String categoryName,
+                                       @RequestParam String description,
+                                       @RequestParam String month,
+                                       @RequestParam int expectedBudget,
+                                       HttpSession session) {
+        Student student = (Student) session.getAttribute("userLogin");
+
+        // Get the current year
+        int currentYear = Year.now().getValue();
+
+        // Create the category and budget
+        categoryService.createCategory(categoryName, description, Month.valueOf(month.toUpperCase()), expectedBudget, student);
+
+        return "redirect:/student/create-category";
     }
+
 
     @PostMapping("/delete-category")
     public String deleteCustomCategory(@RequestParam UUID categoryUUID) {

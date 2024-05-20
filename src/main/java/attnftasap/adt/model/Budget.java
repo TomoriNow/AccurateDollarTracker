@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Month;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity
