@@ -14,7 +14,7 @@ public class Student extends User {
     @JoinColumn(name = "guardianId", referencedColumnName = "userUUID")
     private Guardian guardian;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Category> categories;
 
     public Student() {}

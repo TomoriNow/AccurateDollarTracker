@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="globals.css" />
+    <link rel="stylesheet" href="../css/style2.css" />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="student-expenses">
+    <div class="overlap-wrapper">
+        <div class="overlap">
+            <div class="background"></div>
+            <div class="navbar">
+                <div class="overlap-group">
+                    <img class="receipt-minus" src="img/style-7.svg" />
+                    <div class="text-wrapper">ADT</div>
+                </div>
+                <div class="component">
+                    <div class="div">Help</div>
+                    <img class="search-normal" src="img/search-normal.svg" />
+                </div>
+                <div class="text-wrapper-2">Guardian</div>
+                <div class="text-wrapper-3">Expenses</div>
+                <div class="text-wrapper-4">Report</div>
+            </div>
+            <div class="rectangle">
+                <div class="subheading">
+                    <span style="margin-right: 20px;">Categories</span>
+                </div>
+                <table style="margin-left: 19px">
+                    <tr>
+                        <td class="table-header">Category</td>
+                        <td class="table-header">Expected</td>
+                        <td class="table-header">Reality</td>
+                        <td class="table-header">Modify</td>
+                    </tr>
+                    <tr th:each = "category : ${categories}">
+                        <td th:text = "${category.name}" class="table-cell">
+                            Groceries
+                        </td>
+                        <td class="table-cell" th:text = "${spendingReport.budgetMap.getOrDefault(category.name, null)}">
+                            500k
+                        </td>
+                        <td class="table-cell" th:text = "${spendingReport.totalSpendingPerCategory.getOrDefault(category.name, 0)}">
+                            320k
+                        </td>
+                        <td class="table-cell">
+                            <form th:action="@{/student/delete-category}" method="post" style="display: inline;">
+                                <input type="hidden" name="categoryUUID" th:value="${category.categoryUUID}">
+                                <button type="submit" class="btn btn-link">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+                <div class="AddCategory">Add Category +</div>
+            </div>
+            <div class="rectangle-2">
+                <div class="container">
+                    <div class="row">
+                        <span class="col-6 text-wrapper-6">
+                            Expenses
+                        </span>
+                        <span class="col-4 text-wrapper-18">
+                            Category
+                        </span>
+                        <span class="col-2 text-wrapper-17">
+                            Cost
+                        </span>
+                    </div>
+                    <div class="row" th:each="date : ${dates}">
+                        <div class="col">
+                            <div class="row">
+                                <div style="border-bottom: 2px solid #000;" class="col-4 text-wrapper-7" th:text="${date}">date</div>
+                                <div class="col-8"></div>
+                            </div>
+                            <div class="row" th:each="expense : ${spendingReport.expensesPerDate.getOrDefault(date, null)}">
+                                <div class="col-6 text-wrapper-14" th:text="${expense.name}">expense</div>
+                                <div class="col-4 text-wrapper-15" th:text="${expense.category.name}">category</div> <!-- Assuming category field -->
+                                <div class="col-2 text-wrapper-16" th:text="${expense.cost}">cost</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-5">
+                                    <form action="/student/saveExpense" method="get">
+                                        <input type="hidden" name="year" th:value="${currentSelectedYear}">
+                                        <input type="hidden" name="month" th:value="${currentSelectedMonth}">
+                                        <input type="hidden" name="date" th:value="${date}">
+                                        <button type="submit" style="padding-left: 15px" class="btn btn-link text-wrapper-21">Add Expense +</button>
+                                    </form>
+                                </div>
+                                <div class="col-5"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="div-wrapper"><div class="text-wrapper-22">See Suggestions</div></div>
+
+            <div class="rectangle-4">
+                <p class="subheading">
+                <label for="month" style="margin-right: 10px;">Month:</label>
+                <select id="month" class="rectangle-5-select">
+                    <option value="1" th:selected="${currentSelectedMonth == 1}">January</option>
+                    <option value="2" th:selected="${currentSelectedMonth == 2}">February</option>
+                    <option value="3" th:selected="${currentSelectedMonth == 3}">March</option>
+                    <option value="4" th:selected="${currentSelectedMonth == 4}">April</option>
+                    <option value="5" th:selected="${currentSelectedMonth == 5}">May</option>
+                    <option value="6" th:selected="${currentSelectedMonth == 6}">June</option>
+                    <option value="7" th:selected="${currentSelectedMonth == 7}">July</option>
+                    <option value="8" th:selected="${currentSelectedMonth == 8}">August</option>
+                    <option value="9" th:selected="${currentSelectedMonth == 9}">September</option>
+                    <option value="10" th:selected="${currentSelectedMonth == 10}">October</option>
+                    <option value="11" th:selected="${currentSelectedMonth == 11}">November</option>
+                    <option value="12" th:selected="${currentSelectedMonth == 12}">December</option>
+                </select>
+                </p>
+                <p class="subheading">
+                <label for="year" style="margin-right: 35px;">Year:</label>
+                <select id ="year" class="rectangle-5-select">
+                    <option th:each="year : ${years}" th:value="${year}" th:selected="${year == currentSelectedYear}" th:text="${year}"></option>
+                </select>
+                </p>
+                <button onclick="changeSpendingReport()" class="styled-button">See Report</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    function changeSpendingReport() {
+        var selectedYear = document.getElementById("year").value;
+        var selectedMonth = document.getElementById("month").value;
+        window.location.href = "/student/spendingReport?year=" + selectedYear + "&month=" + selectedMonth;
+    }
+    function saveExpense(year, month, date) {
+        const url = `/saveExpense?year=${year}&month=${month}&date=${date}`;
+
+        // Redirect the browser to the new URL
+        window.location.href = url;
+    }
+</script>
+</body>
+</html>

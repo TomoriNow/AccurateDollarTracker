@@ -15,13 +15,12 @@ public class GuardianshipRequest {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "studentID", referencedColumnName = "userUUID")
-    private Student student;
-
-    @ManyToOne
-    @JoinColumn(name = "guardianID", referencedColumnName = "userUUID")
+    @JoinColumn(name = "guardianid", referencedColumnName = "useruuid")
     private Guardian guardian;
 
+    @ManyToOne
+    @JoinColumn(name = "studentid", referencedColumnName = "useruuid")
+    private Student student;
 
     public GuardianshipRequest() {}
 

@@ -11,5 +11,5 @@ import java.util.UUID;
 public interface RequestService {
     List<GuardianshipRequest> getGuardianRequestsByID(UUID studentId);
     Guardian getIsGuardianByID(UUID studentId);
-    void removeGuardianByID(UUID studentId, boolean accept);
+    void removeGuardianByID(UUID studentId, UUID requestId, boolean accept);
 }

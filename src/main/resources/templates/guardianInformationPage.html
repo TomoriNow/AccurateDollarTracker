@@ -1,10 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8" />
     <title>Guardian Information Page</title>
+    <link rel="stylesheet" href="../css/styles.css" />
 </head>
 <body>
-
+<div class="guardian-information">
+    <div class="overlap-wrapper">
+        <div class="overlap">
+            <div class="background"></div>
+            <div class="navbar">
+                <div class="overlap-group">
+                    <img class="receipt-minus" src="https://cdn.animaapp.com/projects/664409b92bfe44cb68582391/releases/66440a2c0be0de2ef7c69569/img/receipt-minus-style7.svg" />
+                    <a href="/student/"><div class="text-wrapper">ADT</div></a>
+                </div>
+                <div class="component">
+                    <a href="#"><div class="div">Help</div></a>
+                    <img class="search-normal" src="https://cdn.animaapp.com/projects/664409b92bfe44cb68582391/releases/66440a2c0be0de2ef7c69569/img/search-normal.svg" />
+                </div>
+            </div>
+            <div class="text-wrapper-2">Guardian Information</div>
+            <div th:if="${student.guardian==null}">
+                <div class="text-wrapper-3">No Guardians Currently</div>
+                <p class="p">
+                    Guardians are able to monitor your finances and help you make better financial decisions. Wait For a
+                    guardian to add you!
+                </p>
+                <img class="security-user" src="https://cdn.animaapp.com/projects/664409b92bfe44cb68582391/releases/66440a2c0be0de2ef7c69569/img/security-user.svg" />
+                <div class="overlap-group-wrapper">
+                    <div class="overlap-2">
+                        <div class="sign-up-button"><div class="sign-up"></div></div>
+                        <a href="/student/invite-page"><div class="text-wrapper-4">View Invites</div></a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${student.guardian!=null}">
+                <div class="rectangle-guardian-info"></div>
+                <div class="text-wrapper-guardian-info3"><span th:text="${guardian.getUserUUID()}"></span></div>
+                <div class="component-guardian-info2"><div class="text-wrapper-guardian-info4" th:text="${guardian.getUsername()}"></div></div>
+                <div class="overlap-group-wrapper-guardian-info">
+                    <div class="overlap-guardian-info2">
+                        <div class="sign-up-button-guardian-info"><div class="sign-up-guardian-info"></div></div>
+                        <form th:action="@{/student/remove-guardian}" method="post">
+                            <input type="hidden" name="studentId" th:value="${student.userUUID}" />
+                            <button type="submit" class="view-invites-guardian-info">Remove Guardian</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
