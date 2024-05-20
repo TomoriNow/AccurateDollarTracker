@@ -79,10 +79,15 @@ public class ADTController {
         return "redirect:/student/spending_report?month="+month+"&year="+year;
     }
 
+    @GetMapping("/create-category")
+    public String createCategoryPage() {
+        return "createCategory";
+    }
+
     @PostMapping("/create-category")
-    public String createCategory(@RequestParam String categoryName) {
+    public String createCustomCategory(@RequestParam String categoryName) {
         categoryService.createCategory(categoryName);
-        return "redirect:/student/spendingReport";
+        return "redirect:/create-category";
     }
 
     @DeleteMapping("/delete-category")
