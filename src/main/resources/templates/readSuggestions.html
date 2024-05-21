@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Read Suggestions</title>
+</head>
+<body>
+<h1>Read Suggestions</h1>
+<div th:each="suggestion : ${suggestions}">
+  <p th:text="${suggestion.suggestion}"></p>
+  <form action="/suggestions/delete" method="post">
+    <input type="hidden" name="uuid" th:value="${suggestion.uuid}" />
+    <button type="submit">Dismiss</button>
+  </form>
+</div>
+</body>
+</html>

@@ -390,6 +390,20 @@ class SuggestionsController {
             return "error_page"; // Handle the error case
         }
     }
+
+    @GetMapping("/read")
+    public String readSuggestions(HttpSession session, Model model) {
+        Student student = (Student) session.getAttribute("userLogin");
+        List<Suggestions> suggestions = suggestionsService.getSuggestionsByChildUuid(student.getUserUUID().toString());
+        model.addAttribute("suggestions", suggestions);
+        return "readSuggestions";
+    }
+
+    @PostMapping("/delete")
+    public String deleteSuggestion(@RequestParam("uuid") String uuid) {
+        suggestionsService.deleteSuggestionByUuid(uuid);
+        return "redirect:/suggestions/read"; // Redirect back to the read page after deletion
+    }
 }
 
 @Controller
