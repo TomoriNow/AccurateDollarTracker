@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Create Suggestion</title>
@@ -9,8 +9,9 @@
 <form action="/suggestions/create" method="post">
   <input type="hidden" th:value="${suggestion.childUuid}" name="childUuid"/>
   <input type="hidden" th:value="${suggestion.guardianUuid}" name="guardianUuid"/>
+  <input type="hidden" th:value="${suggestion.uuid}" name="uuid"/>
   <label for="suggestion">Suggestion:</label>
-  <textarea id="suggestion" name="suggestion" th:field="*{suggestion}"></textarea>
+  <textarea id="suggestion" name="suggestion"></textarea>
   <button type="submit">Save</button>
 </form>
 </body>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Suggestions List</title>
@@ -19,8 +19,7 @@
 <h2>Suggestions for
   <span th:each="student : ${students}"
         th:if="${student.userUUID == selectedStudentId}"
-        th:text="${student.username}">
-        </span>
+        th:text="${student.username}"></span>
 </h2>
 <table>
   <thead>

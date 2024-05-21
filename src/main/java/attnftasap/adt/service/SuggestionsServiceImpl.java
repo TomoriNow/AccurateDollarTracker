@@ -32,4 +32,5 @@ public class SuggestionsServiceImpl implements SuggestionsService {
     public void saveSuggestion(Suggestions suggestion) {
         suggestionsRepository.save(suggestion);
     }
+
 }

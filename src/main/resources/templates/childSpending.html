@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Child Spending Report</title>
 </head>
 <body>
 <h1>Child Spending Report</h1>
-<p>This is the child spending report page.</p>
+<form action="/guardian/select-child" method="post">
+  <label for="student">Select Child:</label>
+  <select id="student" name="studentId">
+    <option th:each="student : ${students}" th:value="${student.userUUID}"><span th:text="${student.username}"></span></option>
+  </select>
+  <button type="submit">Make Suggestions</button>
+</form>
 </body>
 </html>
