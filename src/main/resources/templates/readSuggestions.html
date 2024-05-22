@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Child Spending Report</title>
+  <title>Read Suggestions</title>
   <style>
     body {
       background-color: #9f70fd;
@@ -13,23 +13,16 @@
       height: 100vh;
       margin: 0;
     }
-    .form-container {
+    .suggestion-container {
       background-color: #fff;
       border-radius: 20px;
       padding: 20px;
       box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
       text-align: center; /* Center align contents */
-    }
-    form {
       margin-bottom: 20px;
     }
-    label {
+    p {
       margin-bottom: 10px;
-      display: block; /* Display labels as block elements */
-    }
-    select {
-      padding: 10px;
-      border-radius: 5px;
     }
     button {
       padding: 10px 20px;
@@ -45,15 +38,15 @@
   </style>
 </head>
 <body>
-<div class="form-container">
-  <h1>Child Spending Report</h1>
-  <form action="/guardian/select-child" method="post">
-    <label for="student">Select Child:</label>
-    <select id="student" name="studentId">
-      <option th:each="student : ${students}" th:value="${student.userUUID}"><span th:text="${student.username}"></span></option>
-    </select>
-    <button type="submit">Make Suggestions</button>
-  </form>
+<div class="suggestion-container">
+  <h1>Read Suggestions</h1>
+  <div th:each="suggestion : ${suggestions}">
+    <p th:text="${suggestion.suggestion}"></p>
+    <form action="/suggestions/delete" method="post">
+      <input type="hidden" name="uuid" th:value="${suggestion.uuid}" />
+      <button type="submit">Dismiss</button>
+    </form>
+  </div>
 </div>
 </body>
 </html>

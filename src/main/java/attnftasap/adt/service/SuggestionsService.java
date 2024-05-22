@@ -11,4 +11,8 @@ public interface SuggestionsService {
     List<Suggestions> displayCurrentSuggestions();
 
     void saveSuggestion(Suggestions suggestion);
+
+    void deleteSuggestionByUuid(String uuid);
+
+    List<Suggestions> getSuggestionsByChildUuid(String childUuid);
 }
