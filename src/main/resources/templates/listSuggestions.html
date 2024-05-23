@@ -1,94 +1,40 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Suggestions List</title>
-  <style>
-    body {
-      background-color: #9f70fd;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .form-container {
-      background-color: #fff;
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-      text-align: center; /* Center align contents */
-    }
-    form {
-      margin-bottom: 20px;
-    }
-    label {
-      margin-bottom: 10px;
-      display: block; /* Display labels as block elements */
-    }
-    select {
-      padding: 10px;
-      border-radius: 5px;
-    }
-    table {
-      width: 80%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-    }
-    th {
-      background-color: #f2f2f2;
-    }
-    a {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #7f27ff;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-    a:hover {
-      background-color: #6917d1;
-    }
-  </style>
 </head>
 <body>
-<div class="form-container">
-  <h1>Suggestions List</h1>
-  <form action="/suggestions/list" method="get">
-    <label for="student">Select Student:</label>
-    <select id="student" name="studentId" onchange="this.form.submit()">
-      <option th:each="student : ${students}"
-              th:value="${student.userUUID}"
-              th:text="${student.username}"
-              th:selected="${student.userUUID == selectedStudentId}"></option>
-    </select>
-  </form>
+<h1>Suggestions List</h1>
+<form action="/suggestions/list" method="get">
+  <label for="student">Select Student:</label>
+  <select id="student" name="studentId" onchange="this.form.submit()">
+    <option th:each="student : ${students}"
+            th:value="${student.userUUID}"
+            th:text="${student.username}"
+            th:selected="${student.userUUID == selectedStudentId}"></option>
+  </select>
+</form>
 
-  <h2>Suggestions for
-    <span th:each="student : ${students}"
-          th:if="${student.userUUID == selectedStudentId}"
-          th:text="${student.username}"></span>
-  </h2>
-  <table>
-    <thead>
-    <tr>
-      <th>Suggestion</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="suggestion : ${suggestions}">
-      <td th:text="${suggestion.suggestion}"></td>
-    </tr>
-    </tbody>
-  </table>
+<h2>Suggestions for
+  <span th:each="student : ${students}"
+        th:if="${student.userUUID == selectedStudentId}"
+        th:text="${student.username}">
+        </span>
+</h2>
+<table>
+  <thead>
+  <tr>
+    <th>Suggestion</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="suggestion : ${suggestions}">
+    <td th:text="${suggestion.suggestion}"></td>
+  </tr>
+  </tbody>
+</table>
 
-  <a th:href="'/suggestions/create?studentId=' + ${selectedStudentId}">Create New Suggestion</a>
-</div>
+<a th:href="'/suggestions/create?studentId=' + ${selectedStudentId}">Create New Suggestion</a>
 </body>
 </html>

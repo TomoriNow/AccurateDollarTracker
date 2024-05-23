@@ -10,6 +10,7 @@ import attnftasap.adt.service.SuggestionsService;
 import attnftasap.adt.service.ExpenseService;
 import attnftasap.adt.service.RequestService;
 import attnftasap.adt.service.UserService;
+import attnftasap.adt.service.BudgetService;
 import jakarta.servlet.http.HttpSession;
 import attnftasap.adt.service.SummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,9 @@ public class ADTController {
     @Autowired
     private RequestRepository requestRepository;
 
+    @Autowired
+    private BudgetService budgetService;
+
     @GetMapping("")
     public String getSpendingReportDefault(Model model) {
         LocalDate currentDate = LocalDate.now();
@@ -58,7 +62,7 @@ public class ADTController {
         SpendingReport spendingReport = expenseService.getSpendingReport(student, Month.of(month), year);
         List<Integer> years = getYearOptions();
         List<Integer> dates = getDatesOfMonth(month, year);
-        List<Category> categories = categoryService.findAllCategoriesForStudent(student);
+        List<Category> categories = categoryService.findAllCategoriesForStudentsByMonth(student, Month.of(month));
 
         model.addAttribute("categories", categories);
         model.addAttribute("years", years);
@@ -133,10 +137,27 @@ public class ADTController {
         return "redirect:/student/spendingReport?month="+month+"&year="+year;
     }
 
+    @GetMapping("/create-category")
+    public String createCategoryPage(Model model) {
+        List<String> months = Arrays.asList("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+        model.addAttribute("months", months);
+        return "createCategory";
+    }
+
     @PostMapping("/create-category")
-    public String createCategory(@RequestParam String categoryName) {
-        categoryService.createCategory(categoryName);
-        return "redirect:/student/spendingReport";
+    public String createCustomCategory(@RequestParam String categoryName,
+                                       @RequestParam String month,
+                                       @RequestParam int expectedBudget,
+                                       HttpSession session) {
+        Student student = (Student) session.getAttribute("userLogin");
+
+        // Get the current year
+        int currentYear = Year.now().getValue();
+
+        // Create the category and budget
+        categoryService.createCategory(categoryName, Month.valueOf(month.toUpperCase()), expectedBudget, student);
+
+        return "redirect:/student/create-category";
     }
 
     @PostMapping("/delete-category")
@@ -168,6 +189,7 @@ public class ADTController {
         model.addAttribute("guardianshipRequestList", guardianshipRequestList);
         return "invitePage";
     }
+
     @GetMapping("/suggestions")
     public String viewSuggestions(HttpSession session, Model model) {
         Student student = (Student) session.getAttribute("userLogin");

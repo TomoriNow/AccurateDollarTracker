@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Create Category Page</title>
+    <link rel="stylesheet" href="../css/categories-styles.css" />
+</head>
+<body>
+<div class="create-category">
+    <div class="overlap-wrapper">
+        <div class="overlap">
+            <div class="background"></div>
+            <div class="navbar">
+                <div class="navbar-content">
+                    <div class="left-section">
+                        <div class="text-wrapper"><a href="/student" style="text-decoration: none; color: #ffffff">ADT</a></div>
+                        <div class="logo-section">
+                            <img class="receipt-minus" src="https://cdn.animaapp.com/projects/664409b92bfe44cb68582391/releases/66440a2c0be0de2ef7c69569/img/receipt-minus-style7.svg" />
+                        </div>
+                        <div class="menu-section">
+                            <div class="menu-item"><a href="/student/guardian-information-page" style="text-decoration: none; color: #ffffff">Guardian</a></div>
+                            <div class="menu-item">Expenses</div>
+                            <div class="menu-item"><a href="/student" style="text-decoration: none; color: #ffffff">Report</a></div>
+                        </div>
+                    </div>
+                    <div class="help-section">
+                        <div class="help-text">Help</div>
+                        <img class="search-normal" src="https://cdn.animaapp.com/projects/664409b92bfe44cb68582391/releases/66440a2c0be0de2ef7c69569/img/search-normal.svg" />
+                    </div>
+                </div>
+            </div>
+            <div class="rectangle">
+                <div class="form-container">
+                    <form action="/student/create-category" method="post">
+                        <div class="form-group">
+                            <label for="name" class="label">Name</label>
+                            <input type="text" id="name" name="categoryName" class="input-field" required/>
+                        </div>
+                        <div class="form-group">
+                            <label for="expectedBudget" class="label">Expected Budget</label>
+                            <input type="number" id="expectedBudget" name="expectedBudget" class="input-field" required/>
+                        </div>
+                        <div class="form-group">
+                            <label for="month" class="label">Month</label>
+                            <select id="month" name="month" class="input-field" required>
+                                <option value="JANUARY">January</option>
+                                <option value="FEBRUARY">February</option>
+                                <option value="MARCH">March</option>
+                                <option value="APRIL">April</option>
+                                <option value="MAY">May</option>
+                                <option value="JUNE">June</option>
+                                <option value="JULY">July</option>
+                                <option value="AUGUST">August</option>
+                                <option value="SEPTEMBER">September</option>
+                                <option value="OCTOBER">October</option>
+                                <option value="NOVEMBER">November</option>
+                                <option value="DECEMBER">December</option>
+                            </select>
+                        </div>
+                        <div class="button-container">
+                            <button type="submit" class="save-button">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

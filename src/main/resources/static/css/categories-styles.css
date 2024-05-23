@@ -1,0 +1,216 @@
+@font-face {
+    font-family: "MADE Okine Sans PERSONAL USE-Bold";
+    font-style: normal;
+    font-weight: 700;
+    src: url('https://anima-uploads.s3.amazonaws.com/projects/64e750a3cf0256120bd210f7/fonts/madeokinesanspersonaluse-bold.otf') format("opentype");
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden; /* Prevent scrolling */
+    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica, Arial, sans-serif;
+}
+
+.create-category {
+    position: relative;
+    background-color: #9f70fd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.create-category .overlap-wrapper {
+    background-color: #9f70fd;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.create-category .overlap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    left: 0;
+}
+
+.create-category .background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #7f27ff;
+}
+
+.create-category .navbar {
+    position: absolute;
+    width: 100%;
+    height: 89px;
+    top: 0;
+    left: 0;
+    background-color: #6917d1;
+    box-shadow: 0px 4px 4px #00000040;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.create-category .navbar-content {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.create-category .left-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.create-category .logo-section {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    margin-left: 5px;
+}
+
+.create-category .receipt-minus {
+    width: 41px;
+    height: 41px;
+    margin-right: 10px;
+}
+
+.create-category .text-wrapper {
+    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 28px;
+    margin-right: 10px;
+}
+
+.create-category .menu-section {
+    display: flex;
+    align-items: center;
+}
+
+.create-category .menu-item {
+    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 24px;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.create-category .help-section {
+    display: flex;
+    align-items: center;
+}
+
+.create-category .help-text {
+    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.create-category .search-normal {
+    width: 24px;
+    height: 24px;
+}
+
+.create-category .rectangle {
+    width: 624px;
+    height: auto;
+    background-color: #d1c1f2;
+    position: absolute;
+    top: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 15px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.create-category .form-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.create-category .form-group {
+    width: 80%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.create-category .label {
+    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
+    font-weight: 700;
+    color: #000;
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+.create-category .input-field {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: #e5d8ff;
+    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
+    font-weight: 700;
+    color: #000;
+    font-size: 24px;
+    box-sizing: border-box;
+}
+
+.create-category select {
+    width: 100%; /* Set the width for the select element */
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: #e5d8ff;
+    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
+    font-weight: 700;
+    color: #000;
+    font-size: 24px;
+    box-sizing: border-box; /* Include padding and border in the width calculation */
+}
+
+.create-category .button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.create-category .save-button {
+    width: 263px;
+    height: 62px;
+    background-color: #ffa800;
+    border: none;
+    border-radius: 15px;
+    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
+    font-weight: 700;
+    color: #fff;
+    font-size: 32px;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 0px 4px 4px #00000040;
+    transition: background-color 0.3s;
+}
+
+.create-category .save-button:hover {
+    background-color: #ff8c00;
+}
