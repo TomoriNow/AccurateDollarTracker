@@ -146,8 +146,8 @@ public class ADTController {
         return "redirect:/student";
     }
     @GetMapping("/guardian-information-page")
-    public String getGuardianInformationPage(Model model) {
-        Student student = studentRepository.findByUsername("username"); //Placeholder waiting for login logic
+    public String getGuardianInformationPage(Model model, HttpSession session) {
+        Student student = (Student)  session.getAttribute("userLogin");
         Guardian guardian = student.getGuardian();
         model.addAttribute("guardian", guardian);
         model.addAttribute("student", student);
@@ -161,8 +161,8 @@ public class ADTController {
     }
 
     @GetMapping("/invite-page")
-    public String getInvitePage(Model model) {
-        Student student = studentRepository.findByUsername("username"); // Placeholder waiting for login logic
+    public String getInvitePage(Model model, HttpSession session) {
+        Student student = (Student)  session.getAttribute("userLogin");
         List<GuardianshipRequest> guardianshipRequestList = requestService.getGuardianRequestsByID(student.getUserUUID());
         model.addAttribute("student", student);
         model.addAttribute("guardianshipRequestList", guardianshipRequestList);
@@ -237,6 +237,11 @@ class TestController {
 class UserController {
     @Autowired
     UserService userService;
+
+    @GetMapping("")
+    public String loginChooser(Model model) {
+        return "main";
+    }
 
     @GetMapping("/login/student")
     public String loginStudentPage(Model model) {
