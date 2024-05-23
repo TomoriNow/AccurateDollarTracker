@@ -5,8 +5,14 @@ import attnftasap.adt.repository.ExpenseRepository;
 import attnftasap.adt.repository.GuardianRepository;
 import attnftasap.adt.repository.RequestRepository;
 import attnftasap.adt.repository.StudentRepository;
-import attnftasap.adt.service.*;
+import attnftasap.adt.service.CategoryService;
+import attnftasap.adt.service.SuggestionsService;
+import attnftasap.adt.service.ExpenseService;
+import attnftasap.adt.service.RequestService;
+import attnftasap.adt.service.UserService;
+import attnftasap.adt.service.BudgetService;
 import jakarta.servlet.http.HttpSession;
+import attnftasap.adt.service.SummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -155,12 +161,11 @@ public class ADTController {
         return "redirect:/student/create-category";
     }
 
-
     @PostMapping("/delete-category")
     public String deleteCustomCategory(@RequestParam UUID categoryUUID) {
         //LocalDate currentDate = LocalDate.now();
         categoryService.deleteCustomCategory(categoryUUID);
-        return "redirect:/student/";
+        return "redirect:/student";
     }
     @GetMapping("/guardian-information-page")
     public String getGuardianInformationPage(Model model) {
@@ -274,7 +279,7 @@ class UserController {
         Student authenticated = userService.studentAuthenticate(student.getUsername(), student.getPassword());
         if (authenticated != null) {
             session.setAttribute("userLogin", authenticated);
-            return "redirect:/student/";
+            return "redirect:/student";
         } else {
             return "error_page";
         }
@@ -287,7 +292,7 @@ class UserController {
         if (authenticated != null) {
             session.setAttribute("userLogin", authenticated);
             System.out.println("User logged in: " + authenticated.getUsername());
-            return "redirect:/guardian/";
+            return "redirect:/guardian/child-spending";
         } else {
             return "error_page";
         }
@@ -396,6 +401,10 @@ class SuggestionsController {
             List<Student> students = guardian.getStudents();
             List<Suggestions> suggestions = suggestionsService.displaySuggestion(studentId.toString());
 
+            System.out.println("Students: " + students);
+            System.out.println("Selected Student ID: " + studentId);
+            System.out.println("Suggestions: " + suggestions);
+
             model.addAttribute("students", students);
             model.addAttribute("selectedStudentId", studentId);
             model.addAttribute("suggestions", suggestions);
@@ -415,9 +424,33 @@ class SuggestionsController {
     }
 
     @PostMapping("/create")
-    public String createSuggestionSubmit(@ModelAttribute Suggestions suggestion) {
-        suggestionsService.saveSuggestion(suggestion);
-        return "redirect:/suggestions/list?studentId=" + suggestion.getChildUuid();
+    public String createSuggestionSubmit(@ModelAttribute Suggestions suggestion, HttpSession session) {
+        Guardian guardian = (Guardian) session.getAttribute("userLogin");
+        if (guardian != null) {
+            if (suggestion.getUuid() == null || suggestion.getUuid().isEmpty()) {
+                suggestion.setUuid(UUID.randomUUID().toString());
+            }
+            suggestion.setGuardianUuid(guardian.getUserUUID().toString());
+            System.out.println("Suggestion Text: " + suggestion.getSuggestion());
+            suggestionsService.saveSuggestion(suggestion);
+            return "redirect:/suggestions/list?studentId=" + suggestion.getChildUuid();
+        } else {
+            return "error_page"; // Handle the error case
+        }
+    }
+
+    @GetMapping("/read")
+    public String readSuggestions(HttpSession session, Model model) {
+        Student student = (Student) session.getAttribute("userLogin");
+        List<Suggestions> suggestions = suggestionsService.getSuggestionsByChildUuid(student.getUserUUID().toString());
+        model.addAttribute("suggestions", suggestions);
+        return "readSuggestions";
+    }
+
+    @PostMapping("/delete")
+    public String deleteSuggestion(@RequestParam("uuid") String uuid) {
+        suggestionsService.deleteSuggestionByUuid(uuid);
+        return "redirect:/suggestions/read"; // Redirect back to the read page after deletion
     }
 }
 
@@ -438,9 +471,21 @@ class GuardianController {
     @Autowired
     SuggestionsService suggestionsService;
 
-    @GetMapping("/")
-    public String childReport(Model model) {
-        return "childSpending";
+    @GetMapping("/child-spending")
+    public String childReport(HttpSession session, Model model) {
+        Guardian guardian = (Guardian) session.getAttribute("userLogin");
+        if (guardian != null) {
+            List<Student> students = guardian.getStudents();
+            model.addAttribute("students", students);
+            return "childSpending";
+        } else {
+            return "error_page"; // Handle the error case
+        }
+    }
+
+    @PostMapping("/select-child")
+    public String selectChild(@RequestParam UUID studentId) {
+        return "redirect:/suggestions/list?studentId=" + studentId;
     }
 }
 
