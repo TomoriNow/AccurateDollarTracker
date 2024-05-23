@@ -4,7 +4,6 @@ import attnftasap.adt.model.Budget;
 import attnftasap.adt.model.Category;
 import attnftasap.adt.model.Student;
 import attnftasap.adt.repository.CategoryRepository;
-import attnftasap.adt.repository.StudentRepository;
 import attnftasap.adt.repository.BudgetRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,6 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
 
     @Autowired
-    private StudentRepository studentRepository;
-
-    @Autowired
     private BudgetRepository budgetRepository;
 
     @Autowired
@@ -32,19 +28,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     public void createCategory(String categoryName, Month month, int expectedBudget, Student student) {
-        // Create a new Category
         Category category = new Category(student, categoryName);
         categoryRepository.save(category);
 
-        // Create a new Budget associated with the Category
         Budget budget = new Budget();
         budget.setAmount(expectedBudget);
         budget.setMonth(month);
-        budget.setYear(2024); // Set the year as per your requirement
+        budget.setYear(2024);
         budget.setStudent(student);
         budget.setCategory(category);
 
-        // Save the budget
         budgetRepository.save(budget);
     }
 
