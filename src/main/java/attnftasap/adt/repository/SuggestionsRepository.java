@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface SuggestionsRepository extends JpaRepository<Suggestions, String> {
     List<Suggestions> findByChildUuid(String childUuid);
+    Suggestions findByUuid(String uuid);
 }

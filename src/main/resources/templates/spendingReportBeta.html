@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="globals.css" />
     <link rel="stylesheet" href="../css/style2.css" />
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Spending Report</title>
 </head>
 <body>
 <div class="student-expenses">
@@ -13,16 +14,15 @@
             <div class="background"></div>
             <div class="navbar">
                 <div class="overlap-group">
-                    <img class="receipt-minus" src="img/style-7.svg" />
-                    <div class="text-wrapper">ADT</div>
+                    <img class="receipt-minus" src="https://cdn.animaapp.com/projects/664409b92bfe44cb68582391/releases/66440a2c0be0de2ef7c69569/img/receipt-minus-style7.svg" />
+                    <a href="/student"><div class="text-wrapper">ADT</div></a>
                 </div>
                 <div class="component">
-                    <div class="div">Help</div>
-                    <img class="search-normal" src="img/search-normal.svg" />
+                    <a href="#"><div class="div">Help</div></a>
+                    <img class="search-normal" src="https://cdn.animaapp.com/projects/664409b92bfe44cb68582391/releases/66440a2c0be0de2ef7c69569/img/search-normal.svg" />
                 </div>
-                <div class="text-wrapper-2">Guardian</div>
-                <div class="text-wrapper-3">Expenses</div>
-                <div class="text-wrapper-4">Report</div>
+                <div class="text-wrapper-2"><a href="/student/guardian-information-page" style="text-decoration: none; color: #ffffff">Guardian</a></div>
+                <div class="text-wrapper-3"><a href="/student" style="text-decoration: none; color: #ffffff">Report</a></div>
             </div>
             <div class="rectangle">
                 <div class="subheading">
@@ -33,8 +33,9 @@
                         <td class="table-header">Category</td>
                         <td class="table-header">Expected</td>
                         <td class="table-header">Reality</td>
+                        <td class="table-header">Modify</td>
                     </tr>
-                    <tr th:each = "category : ${student.categories}">
+                    <tr th:each = "category : ${categories}">
                         <td th:text = "${category.name}" class="table-cell">
                             Groceries
                         </td>
@@ -44,6 +45,12 @@
                         <td class="table-cell" th:text = "${spendingReport.totalSpendingPerCategory.getOrDefault(category.name, 0)}">
                             320k
                         </td>
+                        <td class="table-cell">
+                            <form th:action="@{/student/delete-category}" method="post" style="display: inline;">
+                                <input type="hidden" name="categoryUUID" th:value="${category.categoryUUID}">
+                                <button type="submit" class="btn btn-link">Delete</button>
+                            </form>
+                        </td>
                     </tr>
                 </table>
                 <div class="AddCategory">Add Category +</div>
@@ -51,6 +58,11 @@
             <div class="rectangle-2">
                 <div class="container">
                     <div class="row">
+                        <div class="col-7"></div>
+                        <div class="col-2 text-wrapper-18" style="padding-bottom: 35px;">Total:</div>
+                        <div class="col-2 text-wrapper-18" style="padding-bottom: 35px;" th:text="${spendingReport.totalSpending}"></div>
+                    </div>
+                    <div class="row" style="border-bottom: 3px solid #000;">
                         <span class="col-6 text-wrapper-6">
                             Expenses
                         </span>
@@ -87,7 +99,7 @@
                     </div>
                 </div>
             </div>
-            <div class="div-wrapper"><div class="text-wrapper-22">See Suggestions</div></div>
+            <div class="div-wrapper"><div class="text-wrapper-22"><a th:href="@{/suggestions/read}">See Suggestions</a></div></div>
 
             <div class="rectangle-4">
                 <p class="subheading">

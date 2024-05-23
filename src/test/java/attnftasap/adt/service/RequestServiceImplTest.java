@@ -3,18 +3,20 @@ package attnftasap.adt.service;
 import attnftasap.adt.model.Guardian;
 import attnftasap.adt.model.GuardianshipRequest;
 import attnftasap.adt.repository.RequestRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import jakarta.transaction.Transactional;
+import java.util.Optional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class RequestServiceImplTest {
@@ -27,18 +29,14 @@ class RequestServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
-
-    @AfterEach
-    void tearDown() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
     void getGuardianRequestsByID() {
         UUID studentId = UUID.randomUUID();
         List<GuardianshipRequest> expectedRequests = new ArrayList<>();
-        when(requestRepository.findAllById(studentId)).thenReturn(expectedRequests);
+        when(requestRepository.findAllByStudentID(studentId)).thenReturn(expectedRequests);
 
         List<GuardianshipRequest> actualRequests = requestService.getGuardianRequestsByID(studentId);
 
@@ -57,24 +55,34 @@ class RequestServiceImplTest {
     }
 
     @Test
-    void removeGuardianByID_accept() {
+    @Transactional
+    public void testRemoveGuardianByID_AcceptTrue() {
         UUID studentId = UUID.randomUUID();
+        UUID requestId = UUID.randomUUID();
         Guardian guardian = new Guardian();
-        when(requestRepository.findGuardianByStudentId(studentId)).thenReturn(guardian);
+        GuardianshipRequest request = new GuardianshipRequest();
+        request.setGuardian(guardian);
 
-        requestService.removeGuardianByID(studentId, true);
+        when(requestRepository.findById(requestId)).thenReturn(Optional.of(request));
 
-        verify(requestRepository, times(1)).removeGuardianByStudentID(studentId);
+        requestService.removeGuardianByID(studentId, requestId, true);
+
         verify(requestRepository, times(1)).setIsGuardianByID(studentId, guardian);
+        verify(requestRepository, never()).removeGuardianByStudentIdAndRequestId(studentId, requestId);
     }
 
     @Test
-    void removeGuardianByID_reject() {
+    @Transactional
+    public void testRemoveGuardianByID_AcceptFalse() {
         UUID studentId = UUID.randomUUID();
+        UUID requestId = UUID.randomUUID();
 
-        requestService.removeGuardianByID(studentId, false);
+        GuardianshipRequest request = new GuardianshipRequest();
+        when(requestRepository.findById(requestId)).thenReturn(Optional.of(request));
 
-        verify(requestRepository, times(1)).removeGuardianByStudentID(studentId);
+        requestService.removeGuardianByID(studentId, requestId, false);
+
         verify(requestRepository, never()).setIsGuardianByID(any(), any());
+        verify(requestRepository, times(1)).removeGuardianByStudentIdAndRequestId(studentId, requestId);
     }
 }

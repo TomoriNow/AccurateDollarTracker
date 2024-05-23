@@ -1,5 +1,6 @@
 package attnftasap.adt.model;
 import jakarta.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "suggestions")
@@ -14,6 +15,7 @@ public class Suggestions {
     // Constructors, getters, and setters
 
     public Suggestions() {
+        this.uuid = UUID.randomUUID().toString();
     }
 
     public Suggestions(String uuid, String childUuid, String guardianUuid, String suggestion) {

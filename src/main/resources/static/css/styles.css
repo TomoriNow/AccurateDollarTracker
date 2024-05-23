@@ -9,7 +9,7 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    overflow: hidden; /* Prevent scrolling */
+    /* overflow: hidden; Remove this line */
 }
 
 .guardian-information {
@@ -33,19 +33,20 @@ body, html {
     width: 100%;
     height: 100%;
     left: 0;
+    overflow-y: auto; /* Add this line to enable vertical scrolling */
 }
 
 .guardian-information .background {
-    position: absolute;
+    position: fixed;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     top: 0;
     left: 0;
     background-color: #7f27ff;
 }
 
 .guardian-information .navbar {
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 89px;
     top: 0; /* Adjusted top position */
@@ -210,17 +211,18 @@ body, html {
 }
 
 .guardian-information .text-wrapper-invites {
-    position: absolute;
+    position: fixed;
     width: 293px;
-    top: 31px;
-    left: 585px;
+    top: 30px;
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, 0); /* Adjust transform for horizontal centering */
     font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
     font-weight: 700;
     color: #ffffff;
     font-size: 28px;
-    text-align: center;
     letter-spacing: 0;
     line-height: normal;
+    text-align: center; /* Ensure text inside the div is centered */
     white-space: nowrap;
 }
 
@@ -253,12 +255,19 @@ body, html {
     white-space: nowrap;
 }
 
-.guardian-information .overlap-group-wrapper-invites {
+.guardian-information .overlap-group-wrapper-invites,
+.guardian-information .component-invites2 {
     position: absolute;
-    width: 946px;
+    width: 80%; /* Use percentage for responsive width */
+    max-width: 946px; /* Set a maximum width */
     height: 138px;
-    top: 211px;
-    left: 250px;
+    top: 211px; /* Adjust as needed */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center horizontally */
+}
+
+.guardian-information .component-invites2 {
+    top: 390px; /* Adjust as needed for spacing */
 }
 
 .guardian-information .overlap-invites2 {
@@ -267,7 +276,7 @@ body, html {
 }
 
 .guardian-information .rectangle-invites {
-    width: 924px;
+    width: 100%; /* Use 100% for responsive width */
     height: 125px;
     top: 0;
     left: 0;
@@ -278,10 +287,11 @@ body, html {
 
 .guardian-information .div-wrapper-invites {
     position: absolute;
-    width: 543px;
+    width: 60%; /* Use percentage for responsive width */
+    max-width: 543px; /* Set a maximum width */
     height: 120px;
     top: 18px;
-    left: 38px;
+    left: 5%; /* Adjust as needed */
 }
 
 .guardian-information .overlap-group-invites2 {
@@ -292,7 +302,7 @@ body, html {
 
 .guardian-information .text-wrapper-invites3 {
     position: absolute;
-    width: 543px;
+    width: 100%; /* Use 100% for responsive width */
     top: 0;
     left: 0;
     font-family: "MADE Okine Sans PERSONAL USE-Regular", Helvetica;
@@ -305,7 +315,7 @@ body, html {
 
 .guardian-information .text-wrapper-invites4 {
     position: absolute;
-    width: 483px;
+    width: 100%; /* Use 100% for responsive width */
     top: 55px;
     left: 0;
     font-family: "MADE Okine Sans PERSONAL USE-Thin", Helvetica;
@@ -316,58 +326,148 @@ body, html {
     line-height: normal;
 }
 
-.guardian-information .rectangle-invites2 {
-    width: 147px;
+.guardian-information .rectangle-invites2,
+.guardian-information .rectangle-invites3 {
+    width: 20%; /* Use percentage for responsive width */
+    max-width: 147px; /* Set a maximum width */
     height: 38px;
-    top: 19px;
-    left: 726px;
-    background-color: #6918d1;
     position: absolute;
     border-radius: 15px;
+}
+
+.guardian-information .rectangle-invites2 {
+    top: 19px;
+    left: 76%; /* Adjust as needed */
+    background-color: #6918d1;
 }
 
 .guardian-information .rectangle-invites3 {
-    width: 147px;
-    height: 38px;
     top: 68px;
-    left: 726px;
+    left: 76%; /* Adjust as needed */
     background-color: #e12929;
+}
+
+.guardian-information .text-wrapper-invites5,
+.guardian-information .text-wrapper-invites6 {
     position: absolute;
-    border-radius: 15px;
+    width: 20%; /* Use percentage for responsive width */
+    max-width: 293px; /* Set a maximum width */
+    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 22px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: normal;
 }
 
 .guardian-information .text-wrapper-invites5 {
-    position: absolute;
-    width: 293px;
     top: 23px;
-    left: 653px;
-    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
-    font-weight: 700;
-    color: #ffffff;
-    font-size: 22px;
-    text-align: center;
-    letter-spacing: 0;
-    line-height: normal;
+    left: 75%; /* Adjust as needed */
 }
 
 .guardian-information .text-wrapper-invites6 {
-    position: absolute;
-    width: 293px;
     top: 72px;
-    left: 653px;
-    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
-    font-weight: 700;
-    color: #ffffff;
-    font-size: 22px;
+    left: 75%; /* Adjust as needed */
+}
+
+.guardian-information .rectangle-guardian-info {
+    position: absolute;
+    width: 695px;
+    height: 314px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -65%);
+    background-color: #d2c2f2;
+    border-radius: 45px;
+}
+
+.guardian-information .text-wrapper-guardian-info3 {
+    position: absolute;
+    width: 483px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -65%);
+    font-family: "MADE Okine Sans PERSONAL USE-Thin", Helvetica;
+    font-weight: 100;
+    color: #000000;
+    font-size: 28px;
     text-align: center;
     letter-spacing: 0;
     line-height: normal;
 }
 
-.guardian-information .component-invites2 {
+.guardian-information .component-guardian-info2 {
     position: absolute;
-    width: 946px;
-    height: 138px;
-    top: 390px;
-    left: 250px;
+    width: 543px;
+    height: 120px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -95%);
+}
+
+.guardian-information .text-wrapper-guardian-info4 {
+    position: absolute;
+    width: 543px;
+    font-family: "MADE Okine Sans PERSONAL USE-Regular", Helvetica;
+    font-weight: 400;
+    color: #000000;
+    font-size: 54px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.guardian-information .overlap-group-wrapper-guardian-info {
+    position: absolute;
+    width: 201px;
+    height: 132px;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -5%);
+}
+
+.guardian-information .overlap-guardian-info2 {
+    position: relative;
+    height: 132px;
+    border-radius: 15px;
+}
+
+.guardian-information .sign-up-button-guardian-info {
+    position: absolute;
+    width: 201px;
+    height: 132px;
+    top: 0;
+    left: 0;
+    background-color: #ffa800;
+    border-radius: 15px;
+    box-shadow: 0px 4px 4px #00000040;
+}
+
+.guardian-information .sign-up-guardian-info {
+    position: absolute;
+    top: 29px;
+    left: 54px;
+    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 32px;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.guardian-information .view-invites-guardian-info {
+    position: absolute;
+    width: 170px;
+    top: 20px;
+    left: 15px;
+    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 32px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: normal;
+    background-color: transparent;
+    border: none;
 }

@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="globals.css" />
     <link rel="stylesheet" href="../css/style3.css" />
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Add Expense</title>
 </head>
 <body>
 <div class="create-expense">
@@ -14,15 +15,14 @@
                 <div class="background"></div>
                 <div class="navbar">
                     <div class="overlap-group">
-                        <img class="receipt-minus" src="img/style-7.svg" />
-                        <div class="text-wrapper">ADT</div>
+                        <img class="receipt-minus" src="https://cdn.animaapp.com/projects/664409b92bfe44cb68582391/releases/66440a2c0be0de2ef7c69569/img/receipt-minus-style7.svg" />
+                        <a href="/student"><div class="text-wrapper">ADT</div></a>
                     </div>
-                    <div class="text-wrapper-2">Guardian</div>
-                    <div class="text-wrapper-3">Expenses</div>
-                    <div class="text-wrapper-4">Report</div>
+                    <div class="text-wrapper-2"><a href="/student/guardian-information-page" style="text-decoration: none; color: #ffffff">Guardian</a></div>
+                    <div class="text-wrapper-3"><a href="/student" style="text-decoration: none; color: #ffffff">Report</a></div>
                     <div class="component">
-                        <div class="div">Help</div>
-                        <img class="search-normal" src="img/search-normal.svg" />
+                        <a href="#"><div class="div">Help</div></a>
+                        <img class="search-normal" src="https://cdn.animaapp.com/projects/664409b92bfe44cb68582391/releases/66440a2c0be0de2ef7c69569/img/search-normal.svg" />
                     </div>
                     <div style="padding-right: 3%"></div>
                 </div>
@@ -32,8 +32,7 @@
                     <input type="hidden" name="dateOfMonth" th:value="${date}" />
                     <div class="row justify-content-center" style="margin-top: 3%; margin-bottom: 3%">
                         <div class="col-md-6">
-                            <span class="subheading">
-                                Student Expense Form
+                            <span class="subheading" th:text="'Add Expense for ' + ${date} + '/' + ${month} + '/' + ${year}">
                             </span>
                         </div>
                     </div>
@@ -42,7 +41,7 @@
                             <div class="text-wrapper-5">Name:</div>
                         </div>
                         <div class="col-8">
-                            <input th:field="*{name}" type="text" class="text-input" placeholder="Enter the name of the new expense">
+                            <input th:field="*{name}" th:required="true" type="text" class="text-input" placeholder="Enter the name of the new expense">
                         </div>
                     </div>
                     <div class="row" style="margin-top: 5%">
@@ -60,7 +59,7 @@
                             <div class="text-wrapper-5">Cost:</div>
                         </div>
                         <div class="col-8">
-                            <input th:field="*{cost}" type="number" class="text-input" placeholder="Enter the numerical cost here">
+                            <input th:field="*{cost}" type="number" class="text-input" placeholder="Enter the numerical cost here" th:min="1" required>
                         </div>
                     </div>
                 </div>
