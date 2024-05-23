@@ -41,7 +41,7 @@
                             <div class="text-wrapper-5">Name:</div>
                         </div>
                         <div class="col-8">
-                            <input th:field="*{name}" type="text" class="text-input" placeholder="Enter the name of the new expense">
+                            <input th:field="*{name}" th:required="true" type="text" class="text-input" placeholder="Enter the name of the new expense">
                         </div>
                     </div>
                     <div class="row" style="margin-top: 5%">
@@ -59,7 +59,7 @@
                             <div class="text-wrapper-5">Cost:</div>
                         </div>
                         <div class="col-8">
-                            <input th:field="*{cost}" type="number" class="text-input" placeholder="Enter the numerical cost here">
+                            <input th:field="*{cost}" type="number" class="text-input" placeholder="Enter the numerical cost here" th:min="1" required>
                         </div>
                     </div>
                 </div>
