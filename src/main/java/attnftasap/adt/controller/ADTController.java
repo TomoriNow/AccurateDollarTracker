@@ -119,10 +119,6 @@ public class ADTController {
                                   @RequestParam("dateOfMonth") int date,
                                   @RequestParam("categoryName") String categoryName,
                                   HttpSession session) {
-        System.out.println(categoryName);
-        System.out.println(year);
-        System.out.println(month);
-        System.out.println(date);
         Student student = (Student)  session.getAttribute("userLogin");
         Category category = categoryService.findCategoryFromStudent(categoryName, student);
         expense.setCategory(category);
@@ -143,10 +139,28 @@ public class ADTController {
         return "createCategory";
     }
 
+    @GetMapping("/create-budget")
+    public String createBudgetPage(Model model, HttpSession session) {
+        Student student = (Student) session.getAttribute("userLogin");
+        model.addAttribute("student", student);
+        List<String> months = Arrays.asList("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+        model.addAttribute("months", months);
+        return "createBudget";
+    }
+
+    @PostMapping("/create-budget")
+    public String createBudgetPost(@RequestParam String categoryName,
+                                   @RequestParam String month,
+                                   @RequestParam int expectedBudget,
+                                   HttpSession session) {
+        Student student = (Student) session.getAttribute("userLogin");
+        Category category = categoryService.findCategoryFromStudent(categoryName, student);
+        budgetService.createBudget(category, Month.valueOf(month.toUpperCase()), expectedBudget, student);
+        return "redirect:/student";
+    }
+
     @PostMapping("/create-category")
     public String createCustomCategory(@RequestParam String categoryName,
-                                       @RequestParam String month,
-                                       @RequestParam int expectedBudget,
                                        HttpSession session) {
         Student student = (Student) session.getAttribute("userLogin");
 
@@ -154,16 +168,36 @@ public class ADTController {
         int currentYear = Year.now().getValue();
 
         // Create the category and budget
-        categoryService.createCategory(categoryName, Month.valueOf(month.toUpperCase()), expectedBudget, student);
-
+        boolean created = categoryService.createCategory(categoryName, student);
+        if (created){
+            List<Category> categoryList = student.getCategories();
+            categoryList.add(categoryService.findCategoryByStudentAndName(student, categoryName));
+            student.setCategories(categoryList);
+            session.setAttribute("userLogin", student);
+        }
         return "redirect:/student/create-category";
     }
 
     @PostMapping("/delete-category")
-    public String deleteCustomCategory(@RequestParam UUID categoryUUID) {
+    public String deleteCustomCategory(@RequestParam UUID categoryUUID, HttpSession session) {
         //LocalDate currentDate = LocalDate.now();
         categoryService.deleteCustomCategory(categoryUUID);
+        Student student = (Student) session.getAttribute("userLogin");
+        List<Category> categoryList = student.getCategories();
+        student.setCategories(removeCategory(categoryList, categoryUUID));
+        session.setAttribute("userLogin", student);
         return "redirect:/student";
+    }
+
+    private List<Category> removeCategory(List<Category> categoryList, UUID categoryUUID) {
+        for (int i=0; i < categoryList.size(); i++) {
+            Category category = categoryList.get(i);
+            if (category.getCategoryUUID().equals(categoryUUID)) {
+                categoryList.remove(i);
+                return categoryList;
+            }
+        }
+        return categoryList;
     }
     @GetMapping("/guardian-information-page")
     public String getGuardianInformationPage(Model model, HttpSession session) {

@@ -11,8 +11,10 @@ import java.util.UUID;
 
 @Service
 public interface CategoryService {
-    void createCategory(String categoryName, Month month, int expectedBudget, Student student);
+    boolean createCategory(String categoryName,  Student student);
     void deleteCustomCategory(UUID categoryID);
     Category findCategoryFromStudent(String name, Student student);
     List<Category> findAllCategoriesForStudent(Student student);
+
+    Category findCategoryByStudentAndName(Student student, String name);
 }

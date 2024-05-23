@@ -51,7 +51,7 @@ class CategoryServiceImplTest {
 
         when(categoryRepository.save(any())).thenReturn(category);
 
-        categoryService.createCategory("Test Category", JANUARY, 999, student);
+        categoryService.createCategory("Test Category", student);
 
         verify(categoryRepository, times(1)).save(any());
 

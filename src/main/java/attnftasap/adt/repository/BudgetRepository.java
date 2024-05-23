@@ -22,4 +22,6 @@ public interface BudgetRepository extends JpaRepository<Budget, UUID> {
     @Transactional
     @Query("DELETE FROM Budget b WHERE b.category.categoryUUID = :categoryUUID")
     void deleteByCategoryUUID(@Param("categoryUUID") UUID categoryUUID);
+
+    Budget findByCategoryAndMonthAndYearAndStudent(Category category, Month month, int year, Student student);
 }

@@ -20,4 +20,6 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
     void deleteCustomCategoryByID(@Param("categoryUUID") UUID categoryUUID);
 
     List<Category> findByStudent(Student student);
+
+    Category findByStudentAndName(Student student, String name);
 }

@@ -31,21 +31,14 @@ public class CategoryServiceImpl implements CategoryService {
     private BudgetService budgetService;
 
     @Transactional
-    public void createCategory(String categoryName, Month month, int expectedBudget, Student student) {
+    public boolean createCategory(String categoryName, Student student) {
         // Create a new Category
-        Category category = new Category(student, categoryName);
-        categoryRepository.save(category);
-
-        // Create a new Budget associated with the Category
-        Budget budget = new Budget();
-        budget.setAmount(expectedBudget);
-        budget.setMonth(month);
-        budget.setYear(2024); // Set the year as per your requirement
-        budget.setStudent(student);
-        budget.setCategory(category);
-
-        // Save the budget
-        budgetRepository.save(budget);
+        if (categoryRepository.findByStudentAndName(student, categoryName) == null){
+            Category category = new Category(student, categoryName);
+            categoryRepository.save(category);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -68,5 +61,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> findAllCategoriesForStudent(Student student) {
         return categoryRepository.findByStudent(student);
+    }
+
+    @Override
+    public Category findCategoryByStudentAndName(Student student, String name) {
+        return categoryRepository.findByStudentAndName(student, name);
     }
 }
