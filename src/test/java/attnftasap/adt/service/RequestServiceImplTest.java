@@ -68,7 +68,7 @@ class RequestServiceImplTest {
         requestService.removeGuardianByID(studentId, requestId, true);
 
         verify(requestRepository, times(1)).setIsGuardianByID(studentId, guardian);
-        verify(requestRepository, never()).removeGuardianByStudentIdAndRequestId(studentId, requestId);
+        verify(requestRepository, times(1)).removeGuardianByStudentIdAndRequestId(studentId, requestId);
     }
 
     @Test
