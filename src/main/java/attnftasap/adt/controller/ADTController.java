@@ -46,7 +46,7 @@ public class ADTController {
     @Autowired
     private RequestRepository requestRepository;
 
-    @GetMapping("/")
+    @GetMapping("")
     public String getSpendingReportDefault(Model model) {
         LocalDate currentDate = LocalDate.now();
         return "redirect:/student/spendingReport?month="+currentDate.getMonthValue()+"&year="+currentDate.getYear();
@@ -143,7 +143,7 @@ public class ADTController {
     public String deleteCustomCategory(@RequestParam UUID categoryUUID) {
         //LocalDate currentDate = LocalDate.now();
         categoryService.deleteCustomCategory(categoryUUID);
-        return "redirect:/student/";
+        return "redirect:/student";
     }
     @GetMapping("/guardian-information-page")
     public String getGuardianInformationPage(Model model) {
@@ -256,7 +256,7 @@ class UserController {
         Student authenticated = userService.studentAuthenticate(student.getUsername(), student.getPassword());
         if (authenticated != null) {
             session.setAttribute("userLogin", authenticated);
-            return "redirect:/student/";
+            return "redirect:/student";
         } else {
             return "error_page";
         }
