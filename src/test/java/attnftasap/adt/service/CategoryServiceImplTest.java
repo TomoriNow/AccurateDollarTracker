@@ -4,6 +4,7 @@ import attnftasap.adt.model.Budget;
 import attnftasap.adt.model.Category;
 import attnftasap.adt.model.Expense;
 import attnftasap.adt.model.Student;
+import attnftasap.adt.repository.BudgetRepository;
 import attnftasap.adt.repository.CategoryRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,12 +12,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import static java.time.Month.JANUARY;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -27,6 +30,9 @@ class CategoryServiceImplTest {
 
     @InjectMocks
     private CategoryServiceImpl categoryService;
+
+    @InjectMocks
+    private BudgetRepository budgetRepository;
 
     @BeforeEach
     void setUp() {
@@ -45,7 +51,7 @@ class CategoryServiceImplTest {
 
         when(categoryRepository.save(any())).thenReturn(category);
 
-        categoryService.createCategory("Test Category");
+        categoryService.createCategory("Test Category", JANUARY, 999, student);
 
         verify(categoryRepository, times(1)).save(any());
 
@@ -58,7 +64,8 @@ class CategoryServiceImplTest {
         Category category = new Category(student, "Test Category", "Category Description");
         UUID categoryId = category.getCategoryUUID();
         categoryService.deleteCustomCategory(categoryId);
-        verify(categoryRepository, times(1)).deleteCategoryByCategoryUUID(categoryId);
+        verify(budgetRepository, times(1)).deleteByCategoryUUID(categoryId);
+        verify(categoryRepository, times(1)).deleteCustomCategoryByID(categoryId);
     }
 
     @Test

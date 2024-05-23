@@ -51,6 +51,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void deleteCustomCategory(UUID categoryId) {
+        budgetRepository.deleteByCategoryUUID(categoryId);
         categoryRepository.deleteCustomCategoryByID(categoryId);
     }
 
