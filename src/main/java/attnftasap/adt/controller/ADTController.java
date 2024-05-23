@@ -50,7 +50,7 @@ public class ADTController {
     @Autowired
     private BudgetService budgetService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public String getSpendingReportDefault(Model model) {
         LocalDate currentDate = LocalDate.now();
         return "redirect:/student/spendingReport?month="+currentDate.getMonthValue()+"&year="+currentDate.getYear();
@@ -62,7 +62,7 @@ public class ADTController {
         SpendingReport spendingReport = expenseService.getSpendingReport(student, Month.of(month), year);
         List<Integer> years = getYearOptions();
         List<Integer> dates = getDatesOfMonth(month, year);
-        List<Category> categories = categoryService.findAllCategoriesForStudent(student);
+        List<Category> categories = categoryService.findAllCategoriesForStudentsByMonth(student, Month.of(month));
 
         model.addAttribute("categories", categories);
         model.addAttribute("years", years);
@@ -146,7 +146,6 @@ public class ADTController {
 
     @PostMapping("/create-category")
     public String createCustomCategory(@RequestParam String categoryName,
-                                       @RequestParam String description,
                                        @RequestParam String month,
                                        @RequestParam int expectedBudget,
                                        HttpSession session) {
@@ -156,7 +155,7 @@ public class ADTController {
         int currentYear = Year.now().getValue();
 
         // Create the category and budget
-        categoryService.createCategory(categoryName, description, Month.valueOf(month.toUpperCase()), expectedBudget, student);
+        categoryService.createCategory(categoryName, Month.valueOf(month.toUpperCase()), expectedBudget, student);
 
         return "redirect:/student/create-category";
     }

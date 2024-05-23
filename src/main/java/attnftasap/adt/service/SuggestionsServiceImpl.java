@@ -32,4 +32,16 @@ public class SuggestionsServiceImpl implements SuggestionsService {
     public void saveSuggestion(Suggestions suggestion) {
         suggestionsRepository.save(suggestion);
     }
+
+    @Override
+    public List<Suggestions> getSuggestionsByChildUuid(String childUuid) {
+        return suggestionsRepository.findByChildUuid(childUuid);
+    }
+    @Override
+    public void deleteSuggestionByUuid(String uuid) {
+        Suggestions suggestion = suggestionsRepository.findByUuid(uuid);
+        if (suggestion != null) {
+            suggestionsRepository.delete(suggestion);
+        }
+    }
 }

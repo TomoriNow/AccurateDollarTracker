@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.Month;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -30,9 +31,9 @@ public class CategoryServiceImpl implements CategoryService {
     private BudgetService budgetService;
 
     @Transactional
-    public void createCategory(String categoryName, String description, Month month, int expectedBudget, Student student) {
+    public void createCategory(String categoryName, Month month, int expectedBudget, Student student) {
         // Create a new Category
-        Category category = new Category(student, categoryName, description);
+        Category category = new Category(student, categoryName);
         categoryRepository.save(category);
 
         // Create a new Budget associated with the Category
@@ -63,9 +64,14 @@ public class CategoryServiceImpl implements CategoryService {
         }
         return null;
     }
-
     @Override
-    public List<Category> findAllCategoriesForStudent(Student student) {
-        return categoryRepository.findByStudent(student);
+    public List<Category> findAllCategoriesForStudentsByMonth(Student student, Month month) {
+        List<Category> allCategories = categoryRepository.findByStudent(student);
+        return allCategories.stream()
+                .filter(category -> {
+                    Budget budget = budgetService.findByCategoryAndMonth(category, month);
+                    return budget != null && budget.getMonth().equals(month);
+                })
+                .collect(Collectors.toList());
     }
 }

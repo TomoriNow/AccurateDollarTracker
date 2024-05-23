@@ -37,16 +37,10 @@ public class Category {
         this.description = description;
     }
 
-    public void addBudget(Budget budget) {
-        budgets.add(budget);
-        budget.setCategory(this);
+    public Category(Student student, String name) {
+        this.name = name;
+        this.student = student;
     }
-
-    public void removeBudget(Budget budget) {
-        budgets.remove(budget);
-        budget.setCategory(null);
-    }
-
     @Override
     public String toString() {
         return name;
