@@ -65,13 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
         return null;
     }
     @Override
-    public List<Category> findAllCategoriesForStudentsByMonth(Student student, Month month) {
-        List<Category> allCategories = categoryRepository.findByStudent(student);
-        return allCategories.stream()
-                .filter(category -> {
-                    Budget budget = budgetService.findByCategoryAndMonth(category, month);
-                    return budget != null && budget.getMonth().equals(month);
-                })
-                .collect(Collectors.toList());
+    public List<Category> findAllCategoriesForStudent(Student student) {
+        return categoryRepository.findByStudent(student);
     }
 }

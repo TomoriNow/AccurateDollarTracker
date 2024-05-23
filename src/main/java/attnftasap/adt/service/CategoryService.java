@@ -14,5 +14,5 @@ public interface CategoryService {
     void createCategory(String categoryName, Month month, int expectedBudget, Student student);
     void deleteCustomCategory(UUID categoryID);
     Category findCategoryFromStudent(String name, Student student);
-    List<Category> findAllCategoriesForStudentsByMonth(Student student, Month month);
+    List<Category> findAllCategoriesForStudent(Student student);
 }

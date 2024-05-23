@@ -62,8 +62,7 @@ public class ADTController {
         SpendingReport spendingReport = expenseService.getSpendingReport(student, Month.of(month), year);
         List<Integer> years = getYearOptions();
         List<Integer> dates = getDatesOfMonth(month, year);
-        List<Category> categories = categoryService.findAllCategoriesForStudentsByMonth(student, Month.of(month));
-
+        List<Category> categories = categoryService.findAllCategoriesForStudent(student);
         model.addAttribute("categories", categories);
         model.addAttribute("years", years);
         model.addAttribute("student", student);
