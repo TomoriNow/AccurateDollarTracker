@@ -166,8 +166,13 @@ public class ADTController {
         return "redirect:/student";
     }
     @GetMapping("/guardian-information-page")
-    public String getGuardianInformationPage(Model model, HttpSession session) {
-        Student student = (Student)  session.getAttribute("userLogin");
+    public String getGuardianInformationPage(Model model, HttpSession session, @RequestParam(name = "updated", required = false) boolean updated) {
+        Student student = (Student) session.getAttribute("userLogin");
+        if (updated) {
+            // Reload the updated data if the 'updated' parameter is true
+            student = studentRepository.findById(student.getUserUUID()).orElse(null);
+            session.setAttribute("userLogin", student);
+        }
         Guardian guardian = student.getGuardian();
         model.addAttribute("guardian", guardian);
         model.addAttribute("student", student);
@@ -175,8 +180,9 @@ public class ADTController {
     }
 
     @PostMapping("/remove-guardian")
-    public String removeGuardianFromStudent(@RequestParam UUID studentId) {
+    public String removeGuardianFromStudent(@RequestParam UUID studentId, HttpSession session) {
         requestRepository.setGuardianNull(studentId);
+        studentRepository.findById(studentId).ifPresent(updatedStudent -> session.setAttribute("userLogin", updatedStudent));
         return "redirect:/student/guardian-information-page";
     }
 
@@ -350,12 +356,13 @@ class GuardianshipRequestController{
     @GetMapping("/{studentId}/accept/{requestId}")
     public String acceptGuardianRequest(@PathVariable UUID studentId, @PathVariable UUID requestId) {
         requestService.removeGuardianByID(studentId, requestId, true);
-        return "redirect:/student/guardian-information-page";
+        return "redirect:/student/guardian-information-page?updated=true";
     }
 
     @GetMapping("/{studentId}/reject/{requestId}")
-    public String rejectGuardianRequest(@PathVariable UUID studentId, @PathVariable UUID requestId) {
+    public String rejectGuardianRequest(@PathVariable UUID studentId, @PathVariable UUID requestId, HttpSession session) {
         requestService.removeGuardianByID(studentId, requestId, false);
+        studentRepository.findById(studentId).ifPresent(updatedStudent -> session.setAttribute("userLogin", updatedStudent));
         return "redirect:/student/invite-page";
     }
 }
