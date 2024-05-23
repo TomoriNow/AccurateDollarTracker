@@ -10,7 +10,6 @@ import attnftasap.adt.service.SuggestionsService;
 import attnftasap.adt.service.ExpenseService;
 import attnftasap.adt.service.RequestService;
 import attnftasap.adt.service.UserService;
-import attnftasap.adt.service.BudgetService;
 import jakarta.servlet.http.HttpSession;
 import attnftasap.adt.service.SummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +45,6 @@ public class ADTController {
 
     @Autowired
     private RequestRepository requestRepository;
-
-    @Autowired
-    private BudgetService budgetService;
 
     @GetMapping("")
     public String getSpendingReportDefault(Model model) {
@@ -154,7 +150,6 @@ public class ADTController {
         // Get the current year
         int currentYear = Year.now().getValue();
 
-        // Create the category and budget
         categoryService.createCategory(categoryName, Month.valueOf(month.toUpperCase()), expectedBudget, student);
 
         return "redirect:/student/create-category";
