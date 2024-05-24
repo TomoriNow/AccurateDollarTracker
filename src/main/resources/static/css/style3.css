@@ -126,34 +126,6 @@ body, html {
     border-radius: 15px;
 }
 
-.submit-button {
-    position: absolute;
-    width: 263px;
-    height: 62px;
-    top: 0;
-    left: 0;
-    background-color: #ffa800;
-    border-radius: 15px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer; /* Change cursor to pointer on hover */
-    transition: background-color 0.3s; /* Add smooth transition on hover */
-}
-
-.submit-button .button-text {
-    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
-    font-weight: 700;
-    color: #ffffff;
-    font-size: 32px;
-    text-align: center;
-}
-
-/* Change background color on hover */
-.submit-button:hover {
-    background-color: #ffca52;
-}
 
 .create-expense .view-invites {
     position: absolute;
@@ -277,4 +249,51 @@ body, html {
     line-height: normal;
     white-space: nowrap;
     display: flex;
+}
+
+.buttons-wrapper {
+    position: absolute;
+    width: 526px; /* Adjust width as needed */
+    height: 62px;
+    top: 75%; /* Keep the same vertical position */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: space-between; /* Space the buttons apart */
+    align-items: center;
+}
+
+.form-overlap-1, .form-overlap-2 {
+    height: 62px;
+    border-radius: 15px;
+}
+
+.submit-button, .cancel-button {
+    width: 247px; /* Adjust width as needed */
+    height: 62px;
+    background-color: #ffa800; /* Adjust background color as needed */
+    border-radius: 15px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cancel-button {
+    background-color: #e0e0e0; /* Light gray color for cancel button */
+}
+
+.button-text {
+    font-family: "MADE Okine Sans PERSONAL USE-Bold", Helvetica;
+    font-weight: 700;
+    color: #ffffff; /* Adjust text color as needed */
+    font-size: 32px;
+    text-align: center;
+}
+
+/* Change background color on hover */
+.submit-button:hover, .cancel-button:hover {
+    background-color: #ffca52; /* Adjust hover background color as needed */
 }
