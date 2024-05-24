@@ -3,6 +3,7 @@ package attnftasap.adt.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.FetchType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @Entity
 @Getter @Setter
 public class Guardian extends User{
-    @OneToMany(mappedBy = "guardian")
+    @OneToMany(mappedBy = "guardian", fetch = FetchType.EAGER)
     private List<Student> students;
 
     public Guardian() {}
