@@ -1,6 +1,7 @@
 package attnftasap.adt.repository;
 
 
+import attnftasap.adt.model.Category;
 import attnftasap.adt.model.Expense;
 import attnftasap.adt.model.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +18,6 @@ public interface ExpenseRepository extends JpaRepository<Expense, UUID> {
     List<Expense> findExpensesByStudentAndMonthYear(@Param("student") Student student, @Param("month") int month, @Param("year") int year);
 
     List<Expense> findAllByStudent(Student student);
+    @Query("SELECT e FROM Expense e WHERE e.category = :category AND MONTH(e.date) = :month")
+    List<Expense> findExpensesByCategoryAndMonth(@Param("category") Category category, @Param("month") int month);
 }

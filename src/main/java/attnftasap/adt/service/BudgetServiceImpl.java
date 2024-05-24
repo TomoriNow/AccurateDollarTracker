@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Month;
 import java.time.Year;
+import java.util.List;
 
 @Service
 public class BudgetServiceImpl implements BudgetService {
@@ -17,16 +18,6 @@ public class BudgetServiceImpl implements BudgetService {
     @Autowired
     public BudgetServiceImpl(BudgetRepository budgetRepository) {
         this.budgetRepository = budgetRepository;
-    }
-
-    @Override
-    public Budget saveBudget(Budget budget) {
-        return budgetRepository.save(budget);
-    }
-
-    @Override
-    public Budget findByCategoryAndMonth(Category category, Month month) {
-        return budgetRepository.findByCategoryAndMonth(category, month);
     }
 
     @Override
@@ -45,5 +36,9 @@ public class BudgetServiceImpl implements BudgetService {
             alreadyExisting.setAmount(expectedBudget);
             budgetRepository.save(alreadyExisting);
         }
+    }
+    @Override
+    public List<Budget> findAllByStudentAndMonthAndYear(Student student, Month month, int year) {
+        return budgetRepository.findAllByStudentAndMonthAndYear(student, month, year);
     }
 }

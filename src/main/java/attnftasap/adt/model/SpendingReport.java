@@ -60,4 +60,5 @@ public class SpendingReport {
 
         expensesPerDate.put(calendar.get(Calendar.DATE), catExpenseList);
     }
+
 }

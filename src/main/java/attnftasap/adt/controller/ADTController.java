@@ -14,7 +14,6 @@ import attnftasap.adt.service.BudgetService;
 import jakarta.servlet.http.HttpSession;
 import attnftasap.adt.service.SummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +23,6 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/student")
@@ -53,7 +51,7 @@ public class ADTController {
     @GetMapping("")
     public String getSpendingReportDefault(Model model) {
         LocalDate currentDate = LocalDate.now();
-        return "redirect:/student/spendingReport?month="+currentDate.getMonthValue()+"&year="+currentDate.getYear();
+        return "redirect:/student/summary";
     }
 
     @GetMapping("/spendingReport")
@@ -409,17 +407,59 @@ class SummaryController {
     private SummaryService summaryService;
 
     @Autowired
-    private StudentRepository studentRepository;
+    private CategoryService categoryService;
+
+    @Autowired
+    private ExpenseService expenseService;
+
 
     @GetMapping("/summary")
-    public ResponseEntity<SpendingReport> getSummary (@RequestParam UUID studentId, @RequestParam int year, @RequestParam Month month) {
-        Optional<Student> optionalStudent = studentRepository.findById(studentId);
-        if (optionalStudent.isPresent()) {
-            Student student = optionalStudent.get();
-            SpendingReport spendingReport = summaryService.getSummary(student, month, year);
-            return ResponseEntity.ok(spendingReport);
+    public String getSummaryPage(@RequestParam(required = false) Integer month,
+                                 @RequestParam(required = false) Integer year,
+                                 Integer date,
+                                 Model model,
+                                 HttpSession session) {
+        Student student = (Student) session.getAttribute("userLogin");
+        List<Category> categories = categoryService.findAllCategoriesForStudent(student);
+        int currentdate = java.time.LocalDate.now().getDayOfMonth();
+        SpendingReport spendingReport;
+
+        if (student != null) {
+            Month currentMonth = Month.of(java.time.LocalDate.now().getMonthValue());
+            int currentYear = java.time.LocalDate.now().getYear();
+
+            if (month != null && year != null) {
+                spendingReport = expenseService.getSpendingReport(student, Month.of(month), year);
+            } else {
+                spendingReport = expenseService.getSpendingReport(student, currentMonth, currentYear);
+            }
+
+            Summary summary = new Summary(spendingReport);
+            int remainingBalance = summary.calculateRemainingBalance();
+
+            model.addAttribute("student", student.getUsername());
+            model.addAttribute("Month", currentMonth);
+            model.addAttribute("Year", currentYear);
+            model.addAttribute("Date", currentdate);
+            model.addAttribute("categories", categories);
+            model.addAttribute("spendingreport", spendingReport);
+            model.addAttribute("remainingBalance", remainingBalance); // Add remaining balance to model
+
+            return "studentDashboard"; // Assuming your HTML file is named "studentDashboard.html"
         } else {
-            return ResponseEntity.notFound().build();
+            return "error_page"; // Handle the error case
+        }
+    }
+
+
+    @GetMapping("/spendingReportRedirect")
+    public String redirectToSpendingReport(HttpSession session) {
+        Student student = (Student) session.getAttribute("userLogin");
+        if (student != null) {
+            LocalDate currentDate = LocalDate.now();
+            return "redirect:/student/spendingReport?month=" + currentDate.getMonthValue() + "&year=" + currentDate.getYear();
+        } else {
+            return "error_page"; // Handle the error case
         }
     }
 }

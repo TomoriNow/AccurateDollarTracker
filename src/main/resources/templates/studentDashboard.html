@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="globals.css" />
+    <link rel="stylesheet" href="../css/dashboard-styles.css" />
+</head>
+<body>
+<div class="student-dashboard">
+    <div class="overlap-wrapper">
+        <div class="overlap">
+            <div class="background"></div>
+            <div class="username">
+                <div class="text-wrapper">Morning, <span th:text="${student}"></span></div>
+            </div>
+            <div class="category-table">
+                <div class="subheading">
+                    <span style="margin-right: 20px;">Categories</span>
+                </div>
+                <table class="categories-table">
+                    <tr>
+                        <td class="table-header">Category</td>
+                    </tr>
+                    <tr th:each="category : ${categories}">
+                        <td th:text="${category.name}" class="table-cell"></td>
+                        <td th:text = "${spendingreport.totalSpendingPerCategory.getOrDefault(category.name, 0)}" class="table-cell">
+                            320k
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+            <div class="username-2"></div>
+            <div class="rectangle"></div>
+            <div class="rectangle-2"></div>
+            <div class="rectangle-4"></div>
+            <div class="rectangle-5"></div>
+            <div class="text-wrapper-2">Perday Spending: </div>
+            <div class="text-wrapper-3">Cumulative Spending: ></div>
+            <div class="text-wrapper-4">Day <span th:text="${Date}"></span> - <span th:text="${Month}"></span></div>
+            <div class="view-spending">
+                <a class="button" th:href="@{/student/spendingReportRedirect}">View Spending -&gt;</a>
+            </div>
+            <div class="remaining-balance">
+                <p class="p">Remaining balance in the month: <span th:text="${remainingBalance}"></span></p>
+            </div>
+            <div class="navbar">
+                <div class="overlap-group">
+                    <img class="receipt-minus" src="https://cdn.animaapp.com/projects/664409b92bfe44cb68582391/releases/66440a2c0be0de2ef7c69569/img/receipt-minus-style7.svg" />
+                    <div class="text-wrapper-7">ADT</div>
+                </div>
+                <div class="component">
+                    <div class="text-wrapper-8">Help</div>
+                    <img class="search-normal" src="https://cdn.animaapp.com/projects/664409b92bfe44cb68582391/releases/66440a2c0be0de2ef7c69569/img/search-normal.svg" />
+                </div>
+                <div class="text-wrapper-9">Guardian</div>
+                <div class="text-wrapper-10">Expenses</div>
+                <div class="text-wrapper-11">Report</div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

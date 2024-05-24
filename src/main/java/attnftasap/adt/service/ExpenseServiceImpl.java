@@ -1,9 +1,6 @@
 package attnftasap.adt.service;
 
-import attnftasap.adt.model.Budget;
-import attnftasap.adt.model.Expense;
-import attnftasap.adt.model.SpendingReport;
-import attnftasap.adt.model.Student;
+import attnftasap.adt.model.*;
 import attnftasap.adt.repository.BudgetRepository;
 import attnftasap.adt.repository.ExpenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,4 +29,15 @@ public class ExpenseServiceImpl implements ExpenseService {
     public Expense saveExpense(Expense expense) {
         return expenseRepository.save(expense);
     }
+
+    @Override
+    public List<Expense> findExpensesByStudentAndMonthYear(Student student, Month month, int year) {
+        return expenseRepository.findExpensesByStudentAndMonthYear(student, month.getValue(), year);
+    }
+
+    @Override
+    public List<Expense> findExpensesByCategoryAndMonth(Category category, Month month) {
+        return expenseRepository.findExpensesByCategoryAndMonth(category, month.getValue());
+    }
+
 }
