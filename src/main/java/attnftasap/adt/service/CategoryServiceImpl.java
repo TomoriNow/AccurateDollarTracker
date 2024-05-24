@@ -4,6 +4,7 @@ import attnftasap.adt.model.Budget;
 import attnftasap.adt.model.Category;
 import attnftasap.adt.model.Student;
 import attnftasap.adt.repository.CategoryRepository;
+import attnftasap.adt.repository.StudentRepository;
 import attnftasap.adt.repository.BudgetRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,29 +22,29 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
 
     @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
     private BudgetRepository budgetRepository;
 
     @Autowired
     private BudgetService budgetService;
 
     @Transactional
-    public void createCategory(String categoryName, Month month, int expectedBudget, Student student) {
-        Category category = new Category(student, categoryName);
-        categoryRepository.save(category);
-
-        Budget budget = new Budget();
-        budget.setAmount(expectedBudget);
-        budget.setMonth(month);
-        budget.setYear(2024);
-        budget.setStudent(student);
-        budget.setCategory(category);
-
-        budgetRepository.save(budget);
+    public boolean createCategory(String categoryName, Student student) {
+        // Create a new Category
+        if (categoryRepository.findByStudentAndName(student, categoryName) == null){
+            Category category = new Category(student, categoryName);
+            categoryRepository.save(category);
+            return true;
+        }
+        return false;
     }
 
     @Override
     @Transactional
     public void deleteCustomCategory(UUID categoryId) {
+        budgetRepository.deleteByCategoryUUID(categoryId);
         categoryRepository.deleteCustomCategoryByID(categoryId);
     }
 
@@ -58,13 +59,12 @@ public class CategoryServiceImpl implements CategoryService {
         return null;
     }
     @Override
-    public List<Category> findAllCategoriesForStudentsByMonth(Student student, Month month) {
-        List<Category> allCategories = categoryRepository.findByStudent(student);
-        return allCategories.stream()
-                .filter(category -> {
-                    Budget budget = budgetService.findByCategoryAndMonth(category, month);
-                    return budget != null && budget.getMonth().equals(month);
-                })
-                .collect(Collectors.toList());
+    public List<Category> findAllCategoriesForStudent(Student student) {
+        return categoryRepository.findByStudent(student);
+    }
+
+    @Override
+    public Category findCategoryByStudentAndName(Student student, String name) {
+        return categoryRepository.findByStudentAndName(student, name);
     }
 }

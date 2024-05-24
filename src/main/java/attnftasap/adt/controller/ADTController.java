@@ -10,6 +10,7 @@ import attnftasap.adt.service.SuggestionsService;
 import attnftasap.adt.service.ExpenseService;
 import attnftasap.adt.service.RequestService;
 import attnftasap.adt.service.UserService;
+import attnftasap.adt.service.BudgetService;
 import jakarta.servlet.http.HttpSession;
 import attnftasap.adt.service.SummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,9 @@ public class ADTController {
     @Autowired
     private RequestRepository requestRepository;
 
+    @Autowired
+    private BudgetService budgetService;
+
     @GetMapping("")
     public String getSpendingReportDefault(Model model) {
         LocalDate currentDate = LocalDate.now();
@@ -58,8 +62,7 @@ public class ADTController {
         SpendingReport spendingReport = expenseService.getSpendingReport(student, Month.of(month), year);
         List<Integer> years = getYearOptions();
         List<Integer> dates = getDatesOfMonth(month, year);
-        List<Category> categories = categoryService.findAllCategoriesForStudentsByMonth(student, Month.of(month));
-
+        List<Category> categories = categoryService.findAllCategoriesForStudent(student);
         model.addAttribute("categories", categories);
         model.addAttribute("years", years);
         model.addAttribute("student", student);
@@ -116,10 +119,6 @@ public class ADTController {
                                   @RequestParam("dateOfMonth") int date,
                                   @RequestParam("categoryName") String categoryName,
                                   HttpSession session) {
-        System.out.println(categoryName);
-        System.out.println(year);
-        System.out.println(month);
-        System.out.println(date);
         Student student = (Student)  session.getAttribute("userLogin");
         Category category = categoryService.findCategoryFromStudent(categoryName, student);
         expense.setCategory(category);
@@ -140,30 +139,74 @@ public class ADTController {
         return "createCategory";
     }
 
+    @GetMapping("/create-budget")
+    public String createBudgetPage(Model model, HttpSession session) {
+        Student student = (Student) session.getAttribute("userLogin");
+        model.addAttribute("student", student);
+        List<String> months = Arrays.asList("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+        model.addAttribute("months", months);
+        return "createBudget";
+    }
+
+    @PostMapping("/create-budget")
+    public String createBudgetPost(@RequestParam String categoryName,
+                                   @RequestParam String month,
+                                   @RequestParam int expectedBudget,
+                                   HttpSession session) {
+        Student student = (Student) session.getAttribute("userLogin");
+        Category category = categoryService.findCategoryFromStudent(categoryName, student);
+        budgetService.createBudget(category, Month.valueOf(month.toUpperCase()), expectedBudget, student);
+        return "redirect:/student";
+    }
+
     @PostMapping("/create-category")
     public String createCustomCategory(@RequestParam String categoryName,
-                                       @RequestParam String month,
-                                       @RequestParam int expectedBudget,
                                        HttpSession session) {
         Student student = (Student) session.getAttribute("userLogin");
 
         // Get the current year
         int currentYear = Year.now().getValue();
 
-        categoryService.createCategory(categoryName, Month.valueOf(month.toUpperCase()), expectedBudget, student);
-
+        // Create the category and budget
+        boolean created = categoryService.createCategory(categoryName, student);
+        if (created){
+            List<Category> categoryList = student.getCategories();
+            categoryList.add(categoryService.findCategoryByStudentAndName(student, categoryName));
+            student.setCategories(categoryList);
+            session.setAttribute("userLogin", student);
+        }
         return "redirect:/student/create-category";
     }
 
     @PostMapping("/delete-category")
-    public String deleteCustomCategory(@RequestParam UUID categoryUUID) {
+    public String deleteCustomCategory(@RequestParam UUID categoryUUID, HttpSession session) {
         //LocalDate currentDate = LocalDate.now();
         categoryService.deleteCustomCategory(categoryUUID);
+        Student student = (Student) session.getAttribute("userLogin");
+        List<Category> categoryList = student.getCategories();
+        student.setCategories(removeCategory(categoryList, categoryUUID));
+        session.setAttribute("userLogin", student);
         return "redirect:/student";
     }
+
+    private List<Category> removeCategory(List<Category> categoryList, UUID categoryUUID) {
+        for (int i=0; i < categoryList.size(); i++) {
+            Category category = categoryList.get(i);
+            if (category.getCategoryUUID().equals(categoryUUID)) {
+                categoryList.remove(i);
+                return categoryList;
+            }
+        }
+        return categoryList;
+    }
     @GetMapping("/guardian-information-page")
-    public String getGuardianInformationPage(Model model, HttpSession session) {
-        Student student = (Student)  session.getAttribute("userLogin");
+    public String getGuardianInformationPage(Model model, HttpSession session, @RequestParam(name = "updated", required = false) boolean updated) {
+        Student student = (Student) session.getAttribute("userLogin");
+        if (updated) {
+            // Reload the updated data if the 'updated' parameter is true
+            student = studentRepository.findById(student.getUserUUID()).orElse(null);
+            session.setAttribute("userLogin", student);
+        }
         Guardian guardian = student.getGuardian();
         model.addAttribute("guardian", guardian);
         model.addAttribute("student", student);
@@ -171,8 +214,9 @@ public class ADTController {
     }
 
     @PostMapping("/remove-guardian")
-    public String removeGuardianFromStudent(@RequestParam UUID studentId) {
+    public String removeGuardianFromStudent(@RequestParam UUID studentId, HttpSession session) {
         requestRepository.setGuardianNull(studentId);
+        studentRepository.findById(studentId).ifPresent(updatedStudent -> session.setAttribute("userLogin", updatedStudent));
         return "redirect:/student/guardian-information-page";
     }
 
@@ -346,12 +390,13 @@ class GuardianshipRequestController{
     @GetMapping("/{studentId}/accept/{requestId}")
     public String acceptGuardianRequest(@PathVariable UUID studentId, @PathVariable UUID requestId) {
         requestService.removeGuardianByID(studentId, requestId, true);
-        return "redirect:/student/guardian-information-page";
+        return "redirect:/student/guardian-information-page?updated=true";
     }
 
     @GetMapping("/{studentId}/reject/{requestId}")
-    public String rejectGuardianRequest(@PathVariable UUID studentId, @PathVariable UUID requestId) {
+    public String rejectGuardianRequest(@PathVariable UUID studentId, @PathVariable UUID requestId, HttpSession session) {
         requestService.removeGuardianByID(studentId, requestId, false);
+        studentRepository.findById(studentId).ifPresent(updatedStudent -> session.setAttribute("userLogin", updatedStudent));
         return "redirect:/student/invite-page";
     }
 }
@@ -452,6 +497,7 @@ class SuggestionsController {
         return "redirect:/suggestions/read"; // Redirect back to the read page after deletion
     }
 }
+
 
 @Controller
 @RequestMapping("/guardian")

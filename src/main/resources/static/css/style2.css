@@ -455,6 +455,19 @@
   font-size: 24px;
 }
 
+.student-expenses .AddBudget {
+  text-align: center;
+  width: 171px;
+  font-family: "MADE Okine Sans PERSONAL USE-Medium", Helvetica;
+  font-weight: 500;
+  color: #ff8c00;
+  letter-spacing: 0;
+  line-height: normal;
+  margin: 10px;
+  margin-left: 85px;
+  font-size: 24px;
+}
+
 .student-expenses .text-wrapper-21 {
   font-size: 24px;
   font-family: "MADE Okine Sans PERSONAL USE-Medium", Helvetica;

@@ -31,10 +31,33 @@
             </div>
             <div class="rectangle">
                 <div class="form-container">
-                    <form action="/student/create-category" method="post">
+                    <form action="/student/create-budget" method="post">
                         <div class="form-group">
                             <label for="name" class="label">Name</label>
-                            <input type="text" id="name" name="categoryName" class="input-field" required/>
+                            <select name="categoryName" class="text-input">
+                                <option  id="name" th:each="category: ${student.categories}" th:value="${category.name}" th:text="${category.name}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="expectedBudget" class="label">Expected Budget</label>
+                            <input type="number" id="expectedBudget" name="expectedBudget" class="input-field" required/>
+                        </div>
+                        <div class="form-group">
+                            <label for="month" class="label">Month</label>
+                            <select id="month" name="month" class="input-field" required>
+                                <option value="JANUARY">January</option>
+                                <option value="FEBRUARY">February</option>
+                                <option value="MARCH">March</option>
+                                <option value="APRIL">April</option>
+                                <option value="MAY">May</option>
+                                <option value="JUNE">June</option>
+                                <option value="JULY">July</option>
+                                <option value="AUGUST">August</option>
+                                <option value="SEPTEMBER">September</option>
+                                <option value="OCTOBER">October</option>
+                                <option value="NOVEMBER">November</option>
+                                <option value="DECEMBER">December</option>
+                            </select>
                         </div>
                         <div class="button-container">
                             <button type="submit" class="save-button">Save</button>
