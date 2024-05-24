@@ -63,11 +63,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="overlap-group-wrapper">
-                    <div class="overlap-2">
+                <div class="buttons-wrapper">
+                    <div class="form-overlap-1">
                         <button type="submit" class="submit-button">
                             <div class="button-text">Submit</div>
                         </button>
+                    </div>
+                    <div class="form-overlap-2">
+                        <a th:href="@{/student/spendingReport(month=${month},year=${year})}" style="text-decoration: none" class="cancel-button">
+                            <div class="button-text">Cancel</div>
+                        </a>
                     </div>
                 </div>
             </form>
